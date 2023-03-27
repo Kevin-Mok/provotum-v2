@@ -58,7 +58,7 @@ export const Pairing: React.FC<PairingProps> = ({ requiredSealers, handleNext }:
   const [connectedSealers, setConnectedSealers] = useState<number>(0)
   const [signedUpSealers, setSignedUpSealers] = useState<number>(0)
 
-  const [readyForDeployment, setReadyForDeployment] = useState(false)
+  const [readyForDeployment, setReadyForDeployment] = useState(true)
 
   const [voteQuestionDeployed, setVoteQuestionDeployed] = useState<boolean>(false)
   const [address, setAddress] = useState<string>('')
@@ -137,17 +137,17 @@ export const Pairing: React.FC<PairingProps> = ({ requiredSealers, handleNext }:
     }
   }
 
-  useInterval(
-    () => {
-      checkNumberOfAuthoritiesOnline()
-    },
-    connectedSealers !== requiredSealers || signedUpSealers !== requiredSealers ? REFRESH_INTERVAL_MS : 10000000
-  )
+  // useInterval(
+    // () => {
+      // checkNumberOfAuthoritiesOnline()
+    // },
+    // connectedSealers !== requiredSealers || signedUpSealers !== requiredSealers ? REFRESH_INTERVAL_MS : 10000000
+  // )
 
-  useEffect(() => {
-    // load page data on component mount
-    checkNumberOfAuthoritiesOnline()
-  }, [])
+  // useEffect(() => {
+    // // load page data on component mount
+    // checkNumberOfAuthoritiesOnline()
+  // }, [])
 
   useEffect(() => {
     // check if the contract is already deployed
