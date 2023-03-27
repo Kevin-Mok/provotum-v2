@@ -29,7 +29,7 @@ export const Registration: React.FC<RegistrationProps> = ({ requiredSealers, han
 
   const [sealers, setSealers] = useState<string[]>([])
 
-  const [allSealersConnected, setAllSealersConnected] = useState(false)
+  const [allSealersConnected, setAllSealersConnected] = useState(true)
 
   useEffect(() => {
     if (sealers.length === requiredSealers) {

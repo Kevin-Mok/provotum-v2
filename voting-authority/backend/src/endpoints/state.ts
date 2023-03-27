@@ -219,14 +219,14 @@ router.post('/state', async (req, res) => {
     // --------------------------------------------------
     case VotingState.REGISTRATION: {
       // verify that all sealers are registered
-      const registeredAuthorities: string[] = getValueFromDB(AUTHORITIES_TABLE) as string[]
-      if (registeredAuthorities.length !== requiredAuthorities) {
-        res.status(400).json({
-          state: currentState,
-          msg: `There are only ${registeredAuthorities.length} sealers registered. ${requiredAuthorities} are needed for the next stage.`,
-        })
-        return
-      }
+      // const registeredAuthorities: string[] = getValueFromDB(AUTHORITIES_TABLE) as string[]
+      // if (registeredAuthorities.length !== requiredAuthorities) {
+        // res.status(400).json({
+          // state: currentState,
+          // msg: `There are only ${registeredAuthorities.length} sealers registered. ${requiredAuthorities} are needed for the next stage.`,
+        // })
+        // return
+      // }
 
       setValue(STATE_TABLE, VotingState.PAIRING)
       break
