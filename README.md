@@ -59,8 +59,8 @@ To run a demo of the project with one voting authority and three sealers use the
 
 **Sealers**
 [Sealer Frontend 1](http://172.1.1.141:4011/) on http://172.1.1.141:4011/ 
-[Sealer Frontend 2](http://172.1.1.141:4012/) on http://172.1.1.141:4012/ 
-[Sealer Frontend 3](http://172.1.1.141:4013/) on http://172.1.1.141:4013/
+[Sealer Frontend 2](http://172.1.1.142:4012/) on http://172.1.1.141:4012/ 
+[Sealer Frontend 3](http://172.1.1.143:4013/) on http://172.1.1.141:4013/
 
 **Voter Frontend**
 [Voter Frontend](http://172.1.1.30:3000/) on http://172.1.1.30:3000/

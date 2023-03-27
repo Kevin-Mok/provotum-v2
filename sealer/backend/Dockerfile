@@ -4,7 +4,7 @@ FROM node:12-alpine as builder
 WORKDIR /usr/src/backend
 
 # install build dependencies
-RUN apk add --no-cache bash python make g++ gcc openssh-client git
+RUN apk add --no-cache bash python3 make g++ gcc openssh-client git
 
 # copy package json, .npmrc and install dependencies
 COPY package*.json ./

@@ -62,6 +62,7 @@ export const getBallotAddress = async (): Promise<string> => {
 
 export const fetchState = async (): Promise<string> => {
   try {
+    console.log(`AUTH_BACKEND_URL: ${AUTH_BACKEND_URL}`)
     const response = await axios.get(`${AUTH_BACKEND_URL}/state`)
     if (response.status === 200) {
       return response.data
