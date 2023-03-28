@@ -61,24 +61,24 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
 
   const nodes: string[] = getValueFromDB(NODES_TABLE)
   const requiredAuthorities: number = parityConfig.numberOfAuthorityNodes
-  if (connectedAuthorities !== requiredAuthorities) {
-    // from chain
-    res.status(400).json({
-      msg: NOT_ALL_SEALERS_CONNECTED,
-      connectedSealers: connectedAuthorities,
-      requiredSealers: requiredAuthorities,
-    })
-    return
-  }
-  if (nodes.length !== requiredAuthorities) {
-    // from db
-    res.status(400).json({
-      msg: NOT_ALL_SEALERS_CONNECTED,
-      connectedSealers: nodes.length,
-      requiredSealers: requiredAuthorities,
-    })
-    return
-  }
+  // if (connectedAuthorities !== requiredAuthorities) {
+    // // from chain
+    // res.status(400).json({
+      // msg: NOT_ALL_SEALERS_CONNECTED,
+      // connectedSealers: connectedAuthorities,
+      // requiredSealers: requiredAuthorities,
+    // })
+    // return
+  // }
+  // if (nodes.length !== requiredAuthorities) {
+    // // from db
+    // res.status(400).json({
+      // msg: NOT_ALL_SEALERS_CONNECTED,
+      // connectedSealers: nodes.length,
+      // requiredSealers: requiredAuthorities,
+    // })
+    // return
+  // }
 
   const voteQuestion: string = req.body.question as string
   const questionIsInvalid: boolean = validateVoteQuestion(voteQuestion)
@@ -88,26 +88,26 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
   }
 
   // create voting auth account
-  let accountAddress: string = ''
-  try {
-    accountAddress = await createAccount(
-      parityConfig.nodeUrl,
-      parityConfig.accountPassword,
-      parityConfig.accountPassword
-    )
-  } catch (error) {
-    res.status(400).json({ msg: ACCOUNT_CREATION_FAILED, error: error.message })
-    return
-  }
+  // let accountAddress: string = ''
+  // try {
+    // accountAddress = await createAccount(
+      // parityConfig.nodeUrl,
+      // parityConfig.accountPassword,
+      // parityConfig.accountPassword
+    // )
+  // } catch (error) {
+    // res.status(400).json({ msg: ACCOUNT_CREATION_FAILED, error: error.message })
+    // return
+  // }
 
-  if (accountAddress !== parityConfig.accountAddress) {
-    res.status(400).json({
-      msg: ACCOUNT_CREATION_FAILED,
-      expectedAddress: parityConfig.accountAddress,
-      createdAddress: accountAddress,
-    })
-    return
-  }
+  // if (accountAddress !== parityConfig.accountAddress) {
+    // res.status(400).json({
+      // msg: ACCOUNT_CREATION_FAILED,
+      // expectedAddress: parityConfig.accountAddress,
+      // createdAddress: accountAddress,
+    // })
+    // return
+  // }
 
   // deploy contracts
   Deploy.init(voteQuestion, parityConfig.numberOfAuthorityNodes, priviledgedAddresses)

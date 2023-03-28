@@ -12,5 +12,8 @@
     "lerna:format": "lerna run format --stream",
     "lerna:lint": "lerna run lint --stream",
     "lerna:install": "lerna bootstrap"
+  },
+  "dependencies": {
+    "@ethereumjs/tx": "^4.1.1"
   }
 }

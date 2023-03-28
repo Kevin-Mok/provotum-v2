@@ -198,8 +198,8 @@ export const Pairing: React.FC<PairingProps> = ({ requiredSealers, handleNext }:
                 <LoadSuccess success={false} loading={loading} />
               </IconButton>
             ) : (
-              <IconButton onClick={createVote} disabled={!(readyForDeployment && question.length > 5)}>
-                <SendIcon color={!(readyForDeployment && question.length > 5) ? 'disabled' : 'primary'} />
+              <IconButton onClick={createVote} disabled={!(readyForDeployment)}>
+                <SendIcon color={!(readyForDeployment) ? 'disabled' : 'primary'} />
               </IconButton>
             )}
           </ListItem>

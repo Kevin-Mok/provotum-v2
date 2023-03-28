@@ -3,3 +3,4 @@ node_modules
 .env
 .npmrc
 github.json
+private-key.ts
