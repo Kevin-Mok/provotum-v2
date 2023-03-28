@@ -24,13 +24,19 @@ const deploy = async (
   // const hasAddresses = addresses !== undefined
   const votingQuestion = (question !== undefined) ? question :""
   const numAuthNodesInit = (numberOfAuthNodes !== undefined) ? numberOfAuthNodes : 1
-  const privAddresses = (addresses !== undefined) ? addresses : ["0x"]
+  const privAddresses = (addresses !== undefined) ? addresses : []
 
     // get txnCount for the nonce value
     const txnCount = await web3.eth.getTransactionCount(account.address);
     // const contractInit = web3.utils.soliditySha3(votingQuestion, numAuthNodesInit, { type: 'string[]', value: privAddresses })
-    const contractInit = web3.utils.soliditySha3(votingQuestion, numAuthNodesInit, { type: 'string', value: privAddresses })
+    // const contractInit = web3.utils.soliditySha3(votingQuestion, numAuthNodesInit, { type: 'string', value: privAddresses }).toString('hex')
+    const contractInit = web3.eth.abi.encodeParameters(['string', 'uint256', 'address[]'], [votingQuestion, numAuthNodesInit, privAddresses]).slice(2);
     console.log(contractInit)
+    // console.log(bytecode)
+    let txData = '0x'+bytecode+contractInit
+    // let txData = '0x'+bytecode
+    // txData = txData
+    // console.log(txData)
 
     const rawTxOptions = {
       nonce: web3.utils.numberToHex(txnCount),
@@ -38,19 +44,24 @@ const deploy = async (
       to: null, //public tx
       value: "0x00",
       // data: '0x'+bytecode+contractInit, // contract binary appended with initialization value
-      data: bytecode+contractInit, // contract binary appended with initialization value
+      data: txData, // contract binary appended with initialization value
+
       gasPrice: "0x0", //ETH per unit of gas
       gasLimit: "0x24A22" //max number of gas units the tx is allowed to use
     };
-    console.log("Creating transaction...");
+    // console.log("Creating transaction...");
     const tx = new Tx(rawTxOptions);
-    console.log("Signing transaction...");
-    tx.sign(privateKey);
-    console.log("Sending transaction...");
-    var serializedTx = tx.serialize();
-    const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
-    console.log("tx transactionHash: " + pTx.transactionHash);
-    console.log("tx contractAddress: " + pTx.contractAddress);
+    // console.log("Signing transaction...");
+    // tx.sign(privateKey);
+    // console.log("Sending transaction...");
+    // var serializedTx = tx.serialize();
+    // const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
+    // console.log("tx transactionHash: " + pTx.transactionHash);
+    // console.log("tx contractAddress: " + pTx.contractAddress);
+    // web3.eth.accounts.signTransaction(rawTxOptions, privateKey).then(signedTx => {
+    web3.eth.accounts.signTransaction(tx, privateKey).then(signedTx => {
+        web3.eth.sendSignedTransaction(signedTx);
+    })
 
   // let deployedContract: Contract
   // try {
