@@ -98,7 +98,7 @@ const deploy = async (
 export const init = async (votingQuestion: string, numberOfAuthNodes: number, addresses: string[]): Promise<string> => {
   try {
     // deploy the modulo math library contract
-    const libAddress = await deploy(moduloLibrary.abi, moduloLibrary.bytecode)
+    // const libAddress = await deploy(moduloLibrary.abi, moduloLibrary.bytecode)
     // console.log(`Library deployed at address: ${libAddress}`)
 
     // deploy the ballot contract
@@ -108,19 +108,20 @@ export const init = async (votingQuestion: string, numberOfAuthNodes: number, ad
     // these "placeholders" are inserted for later replacement by an address
     // we need to manually set the address of the deployed library in order
     // for the Ballot.sol to find it
-    const ballotBytecode = ballotContract.bytecode.replace(
-      /__ModuloMathLib_________________________/g,
-      (libAddress as string).replace('0x', '')
-    )
-    const Ballot = { ...ballotContract }
-    Ballot.bytecode = ballotBytecode
-    const ballotAddress: string = await deploy(
-      Ballot.abi,
-      Ballot.bytecode,
-      votingQuestion,
-      numberOfAuthNodes,
-      addresses
-    )
+    // const ballotBytecode = ballotContract.bytecode.replace(
+      // /__ModuloMathLib_________________________/g,
+      // (libAddress as string).replace('0x', '')
+    // )
+    // const Ballot = { ...ballotContract }
+    // Ballot.bytecode = ballotBytecode
+    // const ballotAddress: string = await deploy(
+      // Ballot.abi,
+      // Ballot.bytecode,
+      // votingQuestion,
+      // numberOfAuthNodes,
+      // addresses
+    // )
+    const ballotAddress = "0xa0623f2cece0783b95a21267ef5b17a73c598aba"
     console.log(`Ballot deployed at address: ${ballotAddress}`)
 
     return ballotAddress
