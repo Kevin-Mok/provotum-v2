@@ -27,13 +27,17 @@ const deploy = async (
   const privAddresses = (addresses !== undefined) ? addresses : []
 
     // get txnCount for the nonce value
+    console.log(account)
     const txnCount = await web3.eth.getTransactionCount(account.address);
+    // const txnCount = 77
+    console.log(account.address, txnCount)
     // const contractInit = web3.utils.soliditySha3(votingQuestion, numAuthNodesInit, { type: 'string[]', value: privAddresses })
     // const contractInit = web3.utils.soliditySha3(votingQuestion, numAuthNodesInit, { type: 'string', value: privAddresses }).toString('hex')
     const contractInit = web3.eth.abi.encodeParameters(['string', 'uint256', 'address[]'], [votingQuestion, numAuthNodesInit, privAddresses]).slice(2);
     console.log(contractInit)
     // console.log(bytecode)
     let txData = '0x'+bytecode+contractInit
+    // console.log(bytecode)
     // let txData = '0x'+bytecode
     // txData = txData
     // console.log(txData)
@@ -46,22 +50,25 @@ const deploy = async (
       // data: '0x'+bytecode+contractInit, // contract binary appended with initialization value
       data: txData, // contract binary appended with initialization value
 
-      gasPrice: "0x0", //ETH per unit of gas
-      gasLimit: "0x24A22" //max number of gas units the tx is allowed to use
+      gasPrice: "0xBA43B7400", //ETH per unit of gas
+      gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
     };
     // console.log("Creating transaction...");
-    const tx = new Tx(rawTxOptions);
-    // console.log("Signing transaction...");
-    // tx.sign(privateKey);
-    // console.log("Sending transaction...");
-    // var serializedTx = tx.serialize();
-    // const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
-    // console.log("tx transactionHash: " + pTx.transactionHash);
-    // console.log("tx contractAddress: " + pTx.contractAddress);
+    const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    console.log("Signing transaction...");
+    tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    console.log("Serializing transaction...");
+    var serializedTx = tx.serialize();
+    console.log("Sending transaction...");
+    const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
+    console.log("tx transactionHash: " + pTx.transactionHash);
+    console.log("tx contractAddress: " + pTx.contractAddress);
+    return pTx.contractAddress
+
     // web3.eth.accounts.signTransaction(rawTxOptions, privateKey).then(signedTx => {
-    web3.eth.accounts.signTransaction(tx, privateKey).then(signedTx => {
-        web3.eth.sendSignedTransaction(signedTx);
-    })
+    // web3.eth.accounts.signTransaction(tx, privateKey).then(signedTx => {
+        // web3.eth.sendSignedTransaction(signedTx);
+    // })
 
   // let deployedContract: Contract
   // try {
@@ -92,7 +99,7 @@ export const init = async (votingQuestion: string, numberOfAuthNodes: number, ad
   try {
     // deploy the modulo math library contract
     const libAddress = await deploy(moduloLibrary.abi, moduloLibrary.bytecode)
-    console.log(`Library deployed at address: ${libAddress}`)
+    // console.log(`Library deployed at address: ${libAddress}`)
 
     // deploy the ballot contract
 

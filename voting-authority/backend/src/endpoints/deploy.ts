@@ -48,16 +48,16 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
   }
 
   // verify that all sealers are connected (i.e. that that the peer count is sufficient)
-  let connectedAuthorities: number = 0
-  try {
-    connectedAuthorities = await getNumberOfConnectedAuthorities()
-  } catch (error) {
-    res.status(400).json({
-      msg: 'Could not verify whether all sealers are connected or not!',
-      error: 'web3: ' + error.message,
-    })
-    return
-  }
+  // let connectedAuthorities: number = 0
+  // try {
+    // connectedAuthorities = await getNumberOfConnectedAuthorities()
+  // } catch (error) {
+    // res.status(400).json({
+      // msg: 'Could not verify whether all sealers are connected or not!',
+      // error: 'web3: ' + error.message,
+    // })
+    // return
+  // }
 
   const nodes: string[] = getValueFromDB(NODES_TABLE)
   const requiredAuthorities: number = parityConfig.numberOfAuthorityNodes
