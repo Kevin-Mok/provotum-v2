@@ -6,13 +6,16 @@ import { Contract } from 'web3-eth-contract'
 import { parityConfig } from '../../config'
 import { BALLOT_ADDRESS_TABLE, getValueFromDB } from '../../database/database'
 import { VotingState } from '../../endpoints/state'
-import { unlockAccountRPC } from '../rpc'
+import { unlockAccountRPC, getAccount, getAccountNonce } from '../rpc'
 import { getWeb3 } from '../web3'
+import { privateKey } from '../../private-key'
 
+const Tx = require('ethereumjs-tx').Transaction
 const ballotContract = require(path.join(__dirname, '/../../../solidity/toDeploy/Ballot.json'))
 const web3 = getWeb3()
 const GAS_LIMIT = 6000000
 const toHex = (number: BN): string => web3.utils.toHex(number)
+const account = getAccount()
 
 /**
  * Returns a Contract object with which one can interface with the Ballot.
@@ -29,17 +32,49 @@ const getAuthAccount = async (): Promise<string> => {
 
 export const setSystemParameters = async (): Promise<void> => {
   const contract = getContract()
-  const authAcc = await getAuthAccount()
+  console.log("contract")
+  // const authAcc = await getAuthAccount()
+  console.log("authAcc")
 
   // possible parameters for p_: 23, 167, 263, 359
   const p_: number = 23
   const g_: number = 2
   const systemParams: FFelGamal.SystemParameters = FFelGamal.SystemSetup.generateSystemParameters(p_, g_)
+  console.log("setSystemParameters")
   try {
-    await contract.methods
-      .setParameters([toHex(systemParams.p), toHex(systemParams.q), toHex(systemParams.g)])
-      .send({ from: authAcc, gas: GAS_LIMIT })
+    const txData = await contract.methods.setParameters(
+        [toHex(systemParams.p), toHex(systemParams.q),
+            toHex(systemParams.g)]).encodeABI()
+      // .send({ from: authAcc, gas: GAS_LIMIT })
+    const rawTxOptions = {
+      nonce: await getAccountNonce(),
+      from: account.address,
+      to: getValueFromDB(BALLOT_ADDRESS_TABLE), //public tx
+      data: txData, // contract binary appended with initialization value
+
+      // maxPriorityFeePerGas: '0x3B9ACA00',
+      // maxFeePerGas: '0x2540BE400',
+      // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
+      gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 50
+      gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
+    };
+    console.log(rawTxOptions)
+    const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    console.log("Signing transaction...");
+    tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    console.log("Serializing transaction...");
+    var serializedTx = tx.serialize();
+    console.log("Sending transaction...");
+    const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
+    console.log("tx transactionHash: " + pTx.transactionHash);
+    console.log("tx contractAddress: " + pTx.contractAddress);
+    // return pTx.contractAddress
+    // await contract.methods
+      // .setParameters([toHex(systemParams.p), toHex(systemParams.q), toHex(systemParams.g)])
+      // // .send({ from: authAcc, gas: GAS_LIMIT })
+      // .send({ from: account.address, gas: GAS_LIMIT })
   } catch (error) {
+      console.log(error)
     throw new Error('System parameters could not be initialized.')
   }
 }

@@ -34,18 +34,18 @@ export const validateVoteQuestion = (question: string): boolean => {
 
 router.post('/deploy', async (req: express.Request, res: express.Response) => {
   const currentState: string = getValueFromDB(STATE_TABLE) as string
-  if (currentState === VotingState.REGISTRATION) {
-    res.status(400).json({ msg: TOO_EARLY })
-    return
-  }
+  // if (currentState === VotingState.REGISTRATION) {
+    // res.status(400).json({ msg: TOO_EARLY })
+    // return
+  // }
 
   // check if the contracts are already deployed
   const isDeployed: boolean = getValueFromDB(BALLOT_DEPLOYED_TABLE) as boolean
-  if (isDeployed) {
-    const address: boolean = getValueFromDB(BALLOT_ADDRESS_TABLE) as boolean
-    res.status(409).json({ address: address, msg: BALLOT_ALREADY_DEPLOYED_MESSAGE })
-    return
-  }
+  // if (isDeployed) {
+    // const address: boolean = getValueFromDB(BALLOT_ADDRESS_TABLE) as boolean
+    // res.status(409).json({ address: address, msg: BALLOT_ALREADY_DEPLOYED_MESSAGE })
+    // return
+  // }
 
   // verify that all sealers are connected (i.e. that that the peer count is sufficient)
   // let connectedAuthorities: number = 0
@@ -119,6 +119,7 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
       console.log("return from deploy")
       // initialize the parameters of the system
       BallotManager.setSystemParameters().then(() => {
+        console.log("ret. setSystemParameters")
         res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
       })
     })
@@ -126,7 +127,8 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
 })
 
 router.get('/deploy', (req: express.Request, res: express.Response) => {
-  const isDeployed: boolean = getValueFromDB(BALLOT_DEPLOYED_TABLE) as boolean
+  // const isDeployed: boolean = getValueFromDB(BALLOT_DEPLOYED_TABLE) as boolean
+  const isDeployed = false
 
   if (isDeployed) {
     const address: boolean = getValueFromDB(BALLOT_ADDRESS_TABLE) as boolean

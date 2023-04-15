@@ -1,6 +1,10 @@
 import axios from 'axios'
+import { getWeb3 } from './web3'
+import { privateKey } from '../private-key'
 
 const config = { headers: { 'Content-Type': 'application/json' } }
+
+const web3 = getWeb3()
 
 export const createAccount = async (url: string, password: string, passphrase: string): Promise<string> => {
   const body = {
@@ -31,4 +35,17 @@ export const unlockAccountRPC = async (url: string, password: string, address: s
   } else {
     return address
   }
+}
+
+export const getAccount = () => {
+    console.log(privateKey)
+    const acc = web3.eth.accounts.privateKeyToAccount(privateKey)
+    console.log(acc)
+    return web3.eth.accounts.privateKeyToAccount(privateKey)
+}
+
+export const getAccountNonce = async () => {
+    const txnCount = await web3.eth.getTransactionCount(getAccount().address);
+    console.log("txnCount", txnCount)
+    return web3.utils.numberToHex(txnCount);
 }
