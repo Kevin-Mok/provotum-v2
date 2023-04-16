@@ -65,9 +65,9 @@ export const setSystemParameters = async (): Promise<void> => {
     console.log("Serializing transaction...");
     var serializedTx = tx.serialize();
     console.log("Sending transaction...");
-    const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
-    console.log("tx transactionHash: " + pTx.transactionHash);
-    console.log("tx contractAddress: " + pTx.contractAddress);
+    // const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
+    // console.log("tx transactionHash: " + pTx.transactionHash);
+    // console.log("tx contractAddress: " + pTx.contractAddress);
     // return pTx.contractAddress
     // await contract.methods
       // .setParameters([toHex(systemParams.p), toHex(systemParams.q), toHex(systemParams.g)])
