@@ -2,6 +2,7 @@
   "version": 3,
   "id": "af309f3c-13e0-44f7-a1c4-f795af97bf49",
   "address": "98b32c998f16e36cff94b430c656335d682e78dd",
+  "privateKey": "0x299da34f69a69c7d8132d4d2ec47caa1b8f8a677eec5d196a6dfec3383d52f16",
   "crypto": {
     "ciphertext": "b5f6736d5dac214cf1ad5f715aff234a7ecdba24172bdb0d8d01512086e3a1ac",
     "cipherparams": { "iv": "f787cf46811ed11ae493ca0648474a90" },

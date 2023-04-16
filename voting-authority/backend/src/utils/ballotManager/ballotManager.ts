@@ -55,7 +55,7 @@ export const setSystemParameters = async (): Promise<void> => {
       // maxPriorityFeePerGas: '0x3B9ACA00',
       // maxFeePerGas: '0x2540BE400',
       // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
-      gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 50
+      gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 10
       gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
     };
     console.log(rawTxOptions)

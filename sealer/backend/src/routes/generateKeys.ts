@@ -11,6 +11,7 @@ router.post('/generateKeys', async (req, res) => {
   try {
     // get the ballot address from the auth-backend
     const contractAddress = await AuthBackend.getBallotAddress()
+    console.log("contractAddress", contractAddress)
     setValue(BALLOT_ADDRESS_TABLE, contractAddress)
   } catch (error) {
     console.log(error)
@@ -42,6 +43,7 @@ router.post('/generateKeys', async (req, res) => {
   try {
     // sealer adds it's public key share to the contract
     await BallotManager.submitPublicKeyShare(keyShare, keyGenProof)
+    console.log("submitPublicKeyShare")
 
     res.status(201).json({ msg: 'Successfully submitted public key share to the ballot contract.' })
   } catch (error) {

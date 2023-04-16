@@ -1,4 +1,5 @@
 import express from 'express'
+import axios, { AxiosResponse } from 'axios'
 
 import * as Deploy from '../../solidity/scripts/deploy'
 import { parityConfig, priviledgedAddresses } from '../config'
@@ -120,15 +121,26 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
       // initialize the parameters of the system
       BallotManager.setSystemParameters().then(() => {
         console.log("ret. setSystemParameters")
-        res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+        // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
       })
     })
     .catch((error: Error) => res.status(500).json({ msg: error.message }))
+
+  try {
+    const response: AxiosResponse = await axios.post("http://localhost:4011/generateKeys")
+    if (!(response.status === 201)) {
+      throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
+    }
+    res.status(201).json({ msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+  } catch (error) {
+    // console.log(error)
+    throw new Error(`Something went wrong with key generation. ${error.message}`)
+  }
 })
 
 router.get('/deploy', (req: express.Request, res: express.Response) => {
-  // const isDeployed: boolean = getValueFromDB(BALLOT_DEPLOYED_TABLE) as boolean
-  const isDeployed = false
+  const isDeployed: boolean = getValueFromDB(BALLOT_DEPLOYED_TABLE) as boolean
+  // const isDeployed = false
 
   if (isDeployed) {
     const address: boolean = getValueFromDB(BALLOT_ADDRESS_TABLE) as boolean

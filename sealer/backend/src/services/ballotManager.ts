@@ -10,6 +10,8 @@ import { unlockAccountRPC } from './rpc'
 const ballotContract = require('../contract-abis/Ballot.json')
 
 const web3 = getWeb3()
+const account = Account.getAccount()
+const Tx = require('ethereumjs-tx').Transaction
 const toHex = (number: BN): string => web3.utils.toHex(number)
 
 /**
@@ -19,6 +21,7 @@ const getContract = (): any => {
   const web3 = getWeb3()
 
   const contractAddress: string = getValueFromDB(BALLOT_ADDRESS_TABLE)
+  console.log("contractAddress", contractAddress)
   const contract = new web3.eth.Contract(ballotContract.abi, contractAddress)
   return contract
 }
@@ -102,11 +105,35 @@ export const submitPublicKeyShare = async (
   keyGenProof: FFelGamal.Proof.KeyGenerationProof
 ): Promise<void> => {
   const contract = getContract()
-  const account = await getAuthAccount()
+  // const account = await getAuthAccount()
   try {
-    await contract.methods
-      .submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d))
-      .send({ from: account })
+    const txData = await contract.methods.submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d)
+).encodeABI()
+    const rawTxOptions = {
+      nonce: await Account.getAccountNonce(),
+      from: account.address,
+      to: getValueFromDB(BALLOT_ADDRESS_TABLE), //public tx
+      data: txData, // contract binary appended with initialization value
+
+      // maxPriorityFeePerGas: '0x3B9ACA00',
+      // maxFeePerGas: '0x2540BE400',
+      // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
+      gasPrice: "0x4A817C800", //ETH per unit of gas, legacy 20
+      gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
+    };
+    console.log(rawTxOptions)
+    const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    console.log("Signing transaction...");
+    tx.sign(Buffer.from(Account.getPrivateKey().slice(2), 'hex'));
+    console.log("Serializing transaction...");
+    var serializedTx = tx.serialize();
+    console.log("Sending transaction...");
+    // const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
+    // console.log("tx transactionHash: " + pTx.transactionHash);
+    // console.log("tx contractAddress: " + pTx.contractAddress);
+    // await contract.methods
+      // .submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d))
+      // .send({ from: account })
   } catch (error) {
     console.log(error)
     throw new Error('The public key share could not be submitted.')
