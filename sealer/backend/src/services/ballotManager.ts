@@ -118,8 +118,9 @@ export const submitPublicKeyShare = async (
       // maxPriorityFeePerGas: '0x3B9ACA00',
       // maxFeePerGas: '0x2540BE400',
       // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
-      gasPrice: "0x4A817C800", //ETH per unit of gas, legacy 20
-      gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
+      // gasPrice: "0x4A817C800", //ETH per unit of gas, legacy 20
+      gasPrice: "0x3B9ACA00", //ETH per unit of gas, legacy 1
+      gasLimit: "0xF4240" //max number of gas units the tx is allowed to use
     };
     console.log(rawTxOptions)
     const tx = new Tx(rawTxOptions, {'chain':'goerli'});
@@ -128,9 +129,9 @@ export const submitPublicKeyShare = async (
     console.log("Serializing transaction...");
     var serializedTx = tx.serialize();
     console.log("Sending transaction...");
-    // const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
-    // console.log("tx transactionHash: " + pTx.transactionHash);
-    // console.log("tx contractAddress: " + pTx.contractAddress);
+    const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
+    console.log("tx transactionHash: " + pTx.transactionHash);
+    console.log("tx contractAddress: " + pTx.contractAddress);
     // await contract.methods
       // .submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d))
       // .send({ from: account })

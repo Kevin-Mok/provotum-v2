@@ -126,16 +126,25 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
     })
     .catch((error: Error) => res.status(500).json({ msg: error.message }))
 
+  // try {
+    // const response: AxiosResponse = await axios.post("http://localhost:4011/generateKeys")
+    // if (!(response.status === 201)) {
+      // throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
+    // }
+  // } catch (error) {
+    // // console.log(error)
+    // throw new Error(`Something went wrong with key generation. ${error.message}`)
+  // }
   try {
-    const response: AxiosResponse = await axios.post("http://localhost:4011/generateKeys")
+    const response: AxiosResponse = await axios.post("http://localhost:4012/generateKeys")
     if (!(response.status === 201)) {
       throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
     }
-    res.status(201).json({ msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
   } catch (error) {
     // console.log(error)
     throw new Error(`Something went wrong with key generation. ${error.message}`)
   }
+  res.status(201).json({ msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
 })
 
 router.get('/deploy', (req: express.Request, res: express.Response) => {
