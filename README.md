@@ -142,6 +142,9 @@ npm run start:localhost
 
 In development mode, the frontend and backend will run on `localhost` for a better DX.
 
+Add your private key in [`private-key.ts.example`](https://github.com/Kevin-Mok/provotum-v2/blob/ganache/voting-authority/backend/src/private-key.ts.example), 
+and then remove the `.example` extension from the filename.
+
 ```bash
 cd voting-authority/backend
 npm run serve:localhost
