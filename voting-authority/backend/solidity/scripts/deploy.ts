@@ -49,7 +49,8 @@ const deploy = async (
       value: "0x00",
       // data: '0x'+bytecode+contractInit, // contract binary appended with initialization value
       data: txData, // contract binary appended with initialization value
-      chainId: '1337',
+      // chainId: '1337',
+      chainId: '0x539', // 1337 in hex
       gasPrice: "0xBA43B7400", //ETH per unit of gas
       gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
     };
