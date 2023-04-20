@@ -49,12 +49,13 @@ const deploy = async (
       value: "0x00",
       // data: '0x'+bytecode+contractInit, // contract binary appended with initialization value
       data: txData, // contract binary appended with initialization value
-
+      chainId: '1337',
       gasPrice: "0xBA43B7400", //ETH per unit of gas
       gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
     };
-    // console.log("Creating transaction...");
-    const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    console.log("Creating transaction...");
+    // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    const tx = new Tx(rawTxOptions, {'chainId':'1337'});
     console.log("Signing transaction...");
     tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
     console.log("Serializing transaction...");
@@ -98,8 +99,8 @@ const deploy = async (
 export const init = async (votingQuestion: string, numberOfAuthNodes: number, addresses: string[]): Promise<string> => {
   try {
     // deploy the modulo math library contract
-    // const libAddress = await deploy(moduloLibrary.abi, moduloLibrary.bytecode)
-    // console.log(`Library deployed at address: ${libAddress}`)
+    const libAddress = await deploy(moduloLibrary.abi, moduloLibrary.bytecode)
+    console.log(`Library deployed at address: ${libAddress}`)
 
     // deploy the ballot contract
 

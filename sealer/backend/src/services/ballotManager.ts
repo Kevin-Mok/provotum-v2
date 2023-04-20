@@ -119,8 +119,10 @@ export const submitPublicKeyShare = async (
       // maxFeePerGas: '0x2540BE400',
       // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
       // gasPrice: "0x4A817C800", //ETH per unit of gas, legacy 20
-      gasPrice: "0x3B9ACA00", //ETH per unit of gas, legacy 1
-      gasLimit: "0xF4240" //max number of gas units the tx is allowed to use
+      // gasPrice: "0x3B9ACA00", //ETH per unit of gas, legacy 1
+      gasPrice: "0x174876E800", //ETH per unit of gas, legacy 100
+      // gasLimit: "0xF4240" //max number of gas units the tx is allowed to use, 1mil
+      gasLimit: "0x30D40" //max number of gas units the tx is allowed to use, 1mil
     };
     console.log(rawTxOptions)
     const tx = new Tx(rawTxOptions, {'chain':'goerli'});
