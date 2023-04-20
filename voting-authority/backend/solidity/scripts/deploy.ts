@@ -1,4 +1,6 @@
 import { Contract } from 'web3-eth-contract'
+import { Common } from '@ethereumjs/common'
+import { Transaction } from '@ethereumjs/tx'
 
 import { parityConfig } from '../../src/config'
 import { privateKey } from '../../src/private-key'
@@ -56,7 +58,9 @@ const deploy = async (
     };
     console.log("Creating transaction...");
     // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
-    const tx = new Tx(rawTxOptions, {'chainId':'1337'});
+    const common = Common.custom({ chainId: 1337 })
+    // const tx = new Tx(rawTxOptions, {'chainId':'1337'});
+    const tx = Transaction.fromTxData(rawTxOptions, { common })
     console.log("Signing transaction...");
     tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
     console.log("Serializing transaction...");
