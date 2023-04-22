@@ -41,6 +41,9 @@ export const setSystemParameters = async (): Promise<void> => {
   const g_: number = 2
   const systemParams: FFelGamal.SystemParameters = FFelGamal.SystemSetup.generateSystemParameters(p_, g_)
   console.log("setSystemParameters")
+  console.log(systemParams.p.toString())
+  console.log(systemParams.q.toString())
+  console.log(systemParams.g.toString())
   try {
     const txData = await contract.methods.setParameters(
         [toHex(systemParams.p), toHex(systemParams.q),
