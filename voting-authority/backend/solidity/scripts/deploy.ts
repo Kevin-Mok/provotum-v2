@@ -121,6 +121,7 @@ export const init = async (votingQuestion: string, numberOfAuthNodes: number, ad
       // numberOfAuthNodes,
       // addresses
     // )
+    console.log(votingQuestion, numberOfAuthNodes, addresses)
     const ballotAddress = "0xa0623f2cece0783b95a21267ef5b17a73c598aba"
     console.log(`Ballot deployed at address: ${ballotAddress}`)
 

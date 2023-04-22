@@ -4,7 +4,9 @@
   "private": true,
   "devDependencies": {
     "@meck93/evote-crypto": "latest",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
     "@types/mocha": "^5.2.7",
+    "hardhat": "^2.14.0",
     "mocha": "^6.2.2",
     "solhint": "^2.3.0",
     "solhint-plugin-prettier": "0.0.3",
