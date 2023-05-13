@@ -107,8 +107,7 @@ export const submitPublicKeyShare = async (
   const contract = getContract()
   // const account = await getAuthAccount()
   try {
-    const txData = await contract.methods.submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d)
-).encodeABI()
+    const txData = await contract.methods.submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d)).encodeABI()
     const rawTxOptions = {
       nonce: await Account.getAccountNonce(),
       from: account.address,
