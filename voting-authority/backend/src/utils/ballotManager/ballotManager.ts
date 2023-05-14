@@ -147,12 +147,38 @@ export const createVerifiers = async (): Promise<void> => {
  */
 export const openBallot = async (): Promise<void> => {
   const contract = getContract()
-  const authAcc = await getAuthAccount()
+  // const authAcc = await getAuthAccount()
   try {
-    await contract.methods.openBallot().send({ from: authAcc, gas: GAS_LIMIT })
+    // await contract.methods.openBallot().send({ from: authAcc, gas: GAS_LIMIT })
+    const txData = await contract.methods.openBallot().encodeABI()
+    sendTx(txData)
   } catch (error) {
     throw new Error('The Ballot could no be opened. Make sure you are the owner and it is not already open.')
   }
+}
+
+const sendTx = async (txData) => { 
+    const rawTxOptions = {
+      nonce: await getAccountNonce(),
+      from: account.address,
+      to: getValueFromDB(BALLOT_ADDRESS_TABLE), //public tx
+      data: txData, // contract binary appended with initialization value
+
+      // maxPriorityFeePerGas: '0x3B9ACA00',
+      // maxFeePerGas: '0x2540BE400',
+      // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
+      gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 10
+      gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
+    };
+    console.log(rawTxOptions)
+    const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    console.log("Signing transaction...");
+    tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    console.log("Serializing transaction...");
+    var serializedTx = tx.serialize();
+    console.log("Sending transaction...");
+    const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
+    console.log("tx transactionHash: " + pTx.transactionHash);
 }
 
 /**
@@ -175,6 +201,7 @@ export const isBallotOpen = async (): Promise<boolean> => {
   const contract = getContract()
   try {
     const status = await contract.methods.getBallotStatus().call()
+    console.log(status)
     return status === VotingState.VOTING
   } catch (error) {
     throw new Error('The status of the Ballot could no be fetched.')

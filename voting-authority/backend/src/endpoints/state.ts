@@ -30,8 +30,8 @@ const router: express.Router = express.Router()
 // ----------------------------------------------------------------------------------------------------
 router.get('/state', async (req, res) => {
   // const currentState: string = getValueFromDB(STATE_TABLE) as string
-  const currentState: string = VotingState.PAIRING
-  // const currentState: string = VotingState.KEY_GENERATION
+  // const currentState: string = VotingState.PAIRING
+  const currentState: string = VotingState.KEY_GENERATION
   const votingQuestion: string = getValueFromDB(VOTING_QUESTION_TABLE)
   const requiredAuthorities: number = parityConfig.numberOfAuthorityNodes
 
@@ -281,6 +281,7 @@ router.post('/state', async (req, res) => {
       let submittedKeyShares: number = 0
       try {
         submittedKeyShares = await BallotManager.getNrOfPublicKeyShares()
+        console.log(submittedKeyShares)
       } catch (error) {
         res.status(500).json({
           state: currentState,
@@ -298,7 +299,8 @@ router.post('/state', async (req, res) => {
 
       // check that the public key is generated
       try {
-        await BallotManager.getPublicKey()
+        const pubKey = await BallotManager.getPublicKey()
+        console.log(pubKey)
       } catch (error) {
         res.status(400).json({
           state: currentState,
@@ -309,6 +311,7 @@ router.post('/state', async (req, res) => {
 
       // open voting via ballot contract
       try {
+        console.log("opening ballot")
         await BallotManager.openBallot()
         await BallotManager.isBallotOpen()
       } catch (error) {
