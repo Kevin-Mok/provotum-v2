@@ -2,6 +2,8 @@ import { FFelGamal } from '@meck93/evote-crypto'
 import BN = require('bn.js')
 import path from 'path'
 import { Contract } from 'web3-eth-contract'
+import { Transaction } from "@ethereumjs/tx";
+import { Common } from "@ethereumjs/common";
 
 import { parityConfig } from '../../config'
 import { BALLOT_ADDRESS_TABLE, getValueFromDB } from '../../database/database'
@@ -51,25 +53,26 @@ export const setSystemParameters = async (): Promise<void> => {
         [toHex(systemParams.p), toHex(systemParams.q),
             toHex(systemParams.g)]).encodeABI()
       // .send({ from: authAcc, gas: GAS_LIMIT })
-    const rawTxOptions = {
-      nonce: await getAccountNonce(),
-      from: account.address,
-      to: getValueFromDB(BALLOT_ADDRESS_TABLE), //public tx
-      data: txData, // contract binary appended with initialization value
+    await sendTx(txData)
+    // const rawTxOptions = {
+      // nonce: await getAccountNonce(),
+      // from: account.address,
+      // to: getValueFromDB(BALLOT_ADDRESS_TABLE), //public tx
+      // data: txData, // contract binary appended with initialization value
 
-      // maxPriorityFeePerGas: '0x3B9ACA00',
-      // maxFeePerGas: '0x2540BE400',
-      // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
-      gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 10
-      gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
-    };
-    console.log(rawTxOptions)
-    const tx = new Tx(rawTxOptions, {'chain':'goerli'});
-    console.log("Signing transaction...");
-    tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
-    console.log("Serializing transaction...");
-    var serializedTx = tx.serialize();
-    console.log("Sending transaction...");
+      // // maxPriorityFeePerGas: '0x3B9ACA00',
+      // // maxFeePerGas: '0x2540BE400',
+      // // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
+      // gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 10
+      // gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
+    // };
+    // console.log(rawTxOptions)
+    // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    // console.log("Signing transaction...");
+    // tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    // console.log("Serializing transaction...");
+    // var serializedTx = tx.serialize();
+    // console.log("Sending transaction...");
     // const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
     // console.log("tx transactionHash: " + pTx.transactionHash);
     // console.log("tx contractAddress: " + pTx.contractAddress);
@@ -153,7 +156,7 @@ export const openBallot = async (): Promise<void> => {
   try {
     // await contract.methods.openBallot().send({ from: authAcc, gas: GAS_LIMIT })
     const txData = await contract.methods.openBallot().encodeABI()
-    sendTx(txData)
+    await sendTx(txData)
   } catch (error) {
     throw new Error('The Ballot could no be opened. Make sure you are the owner and it is not already open.')
   }
@@ -172,12 +175,23 @@ const sendTx = async (txData) => {
       gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 10
       gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
     };
+  const common = Common.custom(
+    {
+      chainId: 1337,
+      defaultHardfork: "shanghai",
+    },
+    { baseChain: "mainnet" }
+  );
     console.log(rawTxOptions)
-    const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+  console.log("Creating transaction...");
+  const tx = new Transaction(rawTxOptions, { common });
     console.log("Signing transaction...");
-    tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    // tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    const signed = tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
     console.log("Serializing transaction...");
-    var serializedTx = tx.serialize();
+    // var serializedTx = tx.serialize();
+    var serializedTx = signed.serialize();
     console.log("Sending transaction...");
     const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
     console.log("tx transactionHash: " + pTx.transactionHash);

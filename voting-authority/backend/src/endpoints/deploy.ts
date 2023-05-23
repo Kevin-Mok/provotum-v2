@@ -116,13 +116,13 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
       setValue(BALLOT_ADDRESS_TABLE, address)
       setValue(BALLOT_DEPLOYED_TABLE, true)
       setValue(VOTING_QUESTION_TABLE, voteQuestion)
-      res.status(201).json({ msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+      // res.status(201).json({ msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
 
       console.log("return from deploy")
       // initialize the parameters of the system
       BallotManager.setSystemParameters().then(() => {
         console.log("ret. setSystemParameters")
-        // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+        res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
       })
     })
     .catch((error: Error) => res.status(500).json({ msg: error.message }))
