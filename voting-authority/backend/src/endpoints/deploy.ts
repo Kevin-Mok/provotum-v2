@@ -116,6 +116,7 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
       setValue(BALLOT_ADDRESS_TABLE, address)
       setValue(BALLOT_DEPLOYED_TABLE, true)
       setValue(VOTING_QUESTION_TABLE, voteQuestion)
+      res.status(201).json({ msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
 
       console.log("return from deploy")
       // initialize the parameters of the system
@@ -144,16 +145,16 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
     // // console.log(error)
     // throw new Error(`Something went wrong with key generation. ${error.message}`)
   // }
-  try {
-    BallotManager.generatePublicKey().then(() => {
-      console.log("ret. generatePublicKey")
-      // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
-    })
-  } catch (error) {
-    // console.log(error)
-    throw new Error(`Something went wrong with generatePublicKey. ${error.message}`)
-  }
-  res.status(201).json({ msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+  // try {
+    // BallotManager.generatePublicKey().then(() => {
+      // console.log("ret. generatePublicKey")
+      // // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+    // })
+  // } catch (error) {
+    // // console.log(error)
+    // throw new Error(`Something went wrong with generatePublicKey. ${error.message}`)
+  // }
+  // res.status(201).json({ msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
 })
 
 router.get('/deploy', (req: express.Request, res: express.Response) => {

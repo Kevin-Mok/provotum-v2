@@ -4,6 +4,8 @@ import { parityConfig } from '../../src/config'
 import { privateKey } from '../../src/private-key'
 import { unlockAccountRPC } from '../../src/utils/rpc'
 import { getWeb3 } from '../../src/utils/web3'
+import { Transaction } from "@ethereumjs/tx";
+import { Common } from "@ethereumjs/common";
 
 const ballotContract = require('../toDeploy/Ballot.json')
 const moduloLibrary = require('../toDeploy/ModuloMathLib.json')
@@ -54,11 +56,21 @@ const deploy = async (
       gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
     };
     // console.log("Creating transaction...");
-    const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+  const common = Common.custom(
+    {
+      chainId: 1337,
+      defaultHardfork: "shanghai",
+    },
+    { baseChain: "mainnet" }
+  );
+
+  console.log("Creating transaction...");
+  const tx = new Transaction(rawTxOptions, { common });
+    // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
     console.log("Signing transaction...");
-    tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    const signed = tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
     console.log("Serializing transaction...");
-    var serializedTx = tx.serialize();
+    var serializedTx = signed.serialize();
     console.log("Sending transaction...");
     const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
     console.log("tx transactionHash: " + pTx.transactionHash);
@@ -98,8 +110,9 @@ const deploy = async (
 export const init = async (votingQuestion: string, numberOfAuthNodes: number, addresses: string[]): Promise<string> => {
   try {
     // deploy the modulo math library contract
-    // const libAddress = await deploy(moduloLibrary.abi, moduloLibrary.bytecode)
-    // console.log(`Library deployed at address: ${libAddress}`)
+    console.log("deploy init")
+    const libAddress = await deploy(moduloLibrary.abi, moduloLibrary.bytecode)
+    console.log(`Library deployed at address: ${libAddress}`)
 
     // deploy the ballot contract
 
@@ -108,21 +121,21 @@ export const init = async (votingQuestion: string, numberOfAuthNodes: number, ad
     // these "placeholders" are inserted for later replacement by an address
     // we need to manually set the address of the deployed library in order
     // for the Ballot.sol to find it
-    // const ballotBytecode = ballotContract.bytecode.replace(
-      // /__ModuloMathLib_________________________/g,
-      // (libAddress as string).replace('0x', '')
-    // )
-    // const Ballot = { ...ballotContract }
-    // Ballot.bytecode = ballotBytecode
-    // const ballotAddress: string = await deploy(
-      // Ballot.abi,
-      // Ballot.bytecode,
-      // votingQuestion,
-      // numberOfAuthNodes,
-      // addresses
-    // )
+    const ballotBytecode = ballotContract.bytecode.replace(
+      /__ModuloMathLib_________________________/g,
+      (libAddress as string).replace('0x', '')
+    )
+    const Ballot = { ...ballotContract }
+    Ballot.bytecode = ballotBytecode
+    const ballotAddress: string = await deploy(
+      Ballot.abi,
+      Ballot.bytecode,
+      votingQuestion,
+      numberOfAuthNodes,
+      addresses
+    )
     console.log(votingQuestion, numberOfAuthNodes, addresses)
-    const ballotAddress = "0xa0623f2cece0783b95a21267ef5b17a73c598aba"
+    // const ballotAddress = "0xa0623f2cece0783b95a21267ef5b17a73c598aba"
     console.log(`Ballot deployed at address: ${ballotAddress}`)
 
     return ballotAddress
