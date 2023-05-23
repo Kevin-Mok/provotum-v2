@@ -6,6 +6,8 @@ import { VotingState } from '../models/states'
 import { Account } from '../utils'
 import { getWeb3 } from '../utils/web3'
 import { unlockAccountRPC } from './rpc'
+import { Transaction } from "@ethereumjs/tx";
+import { Common } from "@ethereumjs/common";
 
 const ballotContract = require('../contract-abis/Ballot.json')
 
@@ -108,6 +110,40 @@ export const submitPublicKeyShare = async (
   // const account = await getAuthAccount()
   try {
     const txData = await contract.methods.submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d)).encodeABI()
+    // const rawTxOptions = {
+      // nonce: await Account.getAccountNonce(),
+      // from: account.address,
+      // to: getValueFromDB(BALLOT_ADDRESS_TABLE), //public tx
+      // data: txData, // contract binary appended with initialization value
+
+      // // maxPriorityFeePerGas: '0x3B9ACA00',
+      // // maxFeePerGas: '0x2540BE400',
+      // // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
+      // // gasPrice: "0x4A817C800", //ETH per unit of gas, legacy 20
+      // gasPrice: "0x3B9ACA00", //ETH per unit of gas, legacy 1
+      // gasLimit: "0xF4240" //max number of gas units the tx is allowed to use
+    // };
+    await sendTx(txData)
+    // console.log(rawTxOptions)
+    // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    // console.log("Signing transaction...");
+    // tx.sign(Buffer.from(Account.getPrivateKey().slice(2), 'hex'));
+    // console.log("Serializing transaction...");
+    // var serializedTx = tx.serialize();
+    // console.log("Sending transaction...");
+    // const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
+    // console.log("tx transactionHash: " + pTx.transactionHash);
+    // console.log("tx contractAddress: " + pTx.contractAddress);
+    // await contract.methods
+      // .submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d))
+      // .send({ from: account })
+  } catch (error) {
+    console.log(error)
+    throw new Error('The public key share could not be submitted.')
+  }
+}
+
+const sendTx = async (txData) => { 
     const rawTxOptions = {
       nonce: await Account.getAccountNonce(),
       from: account.address,
@@ -117,27 +153,29 @@ export const submitPublicKeyShare = async (
       // maxPriorityFeePerGas: '0x3B9ACA00',
       // maxFeePerGas: '0x2540BE400',
       // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
-      // gasPrice: "0x4A817C800", //ETH per unit of gas, legacy 20
-      gasPrice: "0x3B9ACA00", //ETH per unit of gas, legacy 1
-      gasLimit: "0xF4240" //max number of gas units the tx is allowed to use
+      gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 10
+      gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
     };
+  const common = Common.custom(
+    {
+      chainId: 1337,
+      defaultHardfork: "shanghai",
+    },
+    { baseChain: "mainnet" }
+  );
     console.log(rawTxOptions)
-    const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+  console.log("Creating transaction...");
+  const tx = new Transaction(rawTxOptions, { common });
     console.log("Signing transaction...");
-    tx.sign(Buffer.from(Account.getPrivateKey().slice(2), 'hex'));
+    // tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    const signed = tx.sign(Buffer.from(Account.getPrivateKey().slice(2), 'hex'));
     console.log("Serializing transaction...");
-    var serializedTx = tx.serialize();
+    // var serializedTx = tx.serialize();
+    var serializedTx = signed.serialize();
     console.log("Sending transaction...");
     const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
     console.log("tx transactionHash: " + pTx.transactionHash);
-    console.log("tx contractAddress: " + pTx.contractAddress);
-    // await contract.methods
-      // .submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d))
-      // .send({ from: account })
-  } catch (error) {
-    console.log(error)
-    throw new Error('The public key share could not be submitted.')
-  }
 }
 
 /**

@@ -120,15 +120,24 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
 
       console.log("return from deploy")
       // initialize the parameters of the system
-      BallotManager.setSystemParameters().then(() => {
+      BallotManager.setSystemParameters().then(async () => {
         console.log("ret. setSystemParameters")
+        // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+
+        const response: AxiosResponse = await axios.post("http://localhost:4011/generateKeys")
+        console.log("ret. gen key 1")
         res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+        if (!(response.status === 201)) {
+          throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
+        }
       })
     })
     .catch((error: Error) => res.status(500).json({ msg: error.message }))
 
   // try {
     // const response: AxiosResponse = await axios.post("http://localhost:4011/generateKeys")
+    // console.log("ret. gen key 1")
+    // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
     // if (!(response.status === 201)) {
       // throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
     // }
@@ -158,11 +167,14 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
 })
 
 router.get('/deploy', (req: express.Request, res: express.Response) => {
+    console.log("get contract addy")
   const isDeployed: boolean = getValueFromDB(BALLOT_DEPLOYED_TABLE) as boolean
   // const isDeployed = false
+    console.log("isDeployed", isDeployed)
 
   if (isDeployed) {
     const address: boolean = getValueFromDB(BALLOT_ADDRESS_TABLE) as boolean
+    console.log("contract addy: ", address)
     res.status(200).json({ address: address, msg: BALLOT_ALREADY_DEPLOYED_MESSAGE })
   } else {
     // reason why we don't return anything at all
