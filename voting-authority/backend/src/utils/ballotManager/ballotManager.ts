@@ -21,7 +21,9 @@ const account = getAccount()
  * Returns a Contract object with which one can interface with the Ballot.
  */
 const getContract = (): Contract => {
-  const contractAddress: string = getValueFromDB(BALLOT_ADDRESS_TABLE)
+  // const contractAddress: string = getValueFromDB(BALLOT_ADDRESS_TABLE)
+  const contractAddress = "0xA0623f2cECe0783b95a21267Ef5B17a73C598aBa"
+  console.log(contractAddress)
   const contract = new web3.eth.Contract(ballotContract.abi, contractAddress)
   return contract
 }
@@ -210,6 +212,7 @@ export const isBallotOpen = async (): Promise<boolean> => {
 
 export const getNrOfPublicKeyShares = async (): Promise<number> => {
   const contract = getContract()
+  console.log(contract.address)
   try {
     return parseInt(await contract.methods.getNrOfPublicKeyShares().call())
   } catch (error) {
