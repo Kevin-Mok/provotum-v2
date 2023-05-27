@@ -165,6 +165,8 @@ export const openBallot = async (): Promise<void> => {
     // await contract.methods.openBallot().send({ from: authAcc, gas: GAS_LIMIT })
     const txData = await contract.methods.openBallot().encodeABI()
     await sendTx(txData)
+    const isBallotOpenBool = await isBallotOpen()
+    console.log(`ballot open: ${isBallotOpenBool}`)
   } catch (error) {
     throw new Error('The Ballot could no be opened. Make sure you are the owner and it is not already open.')
   }
