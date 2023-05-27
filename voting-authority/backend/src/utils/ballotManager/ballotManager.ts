@@ -23,8 +23,8 @@ const account = getAccount()
  * Returns a Contract object with which one can interface with the Ballot.
  */
 const getContract = (): Contract => {
-  // const contractAddress: string = getValueFromDB(BALLOT_ADDRESS_TABLE)
-  const contractAddress = "0xA0623f2cECe0783b95a21267Ef5B17a73C598aBa"
+  const contractAddress: string = getValueFromDB(BALLOT_ADDRESS_TABLE)
+  // const contractAddress = "0xA0623f2cECe0783b95a21267Ef5B17a73C598aBa"
   console.log(contractAddress)
   const contract = new web3.eth.Contract(ballotContract.abi, contractAddress)
   return contract
@@ -106,8 +106,13 @@ export const generatePublicKey = async (): Promise<void> => {
   // const authAcc = await getAuthAccount()
   try {
     // await contract.methods.generatePublicKey().send({ from: authAcc, gas: GAS_LIMIT })
+    console.log("getNrOfPublicKeyShares")
     let txData = await contract.methods.getNrOfPublicKeyShares().encodeABI()
-    await sendTx(txData)
+    // await sendTx(txData)
+    // const nrOfPublicKeyShares = await contract.methods.getNrOfPublicKeyShares().call()
+    const nrOfPublicKeyShares = await getNrOfPublicKeyShares() 
+    console.log(nrOfPublicKeyShares)
+    console.log("generatePublicKey")
     txData = await contract.methods.generatePublicKey().encodeABI()
     await sendTx(txData)
     // const rawTxOptions = {
@@ -229,7 +234,7 @@ export const isBallotOpen = async (): Promise<boolean> => {
 
 export const getNrOfPublicKeyShares = async (): Promise<number> => {
   const contract = getContract()
-  console.log(contract.address)
+  // console.log(contract.address)
   try {
     return parseInt(await contract.methods.getNrOfPublicKeyShares().call())
   } catch (error) {

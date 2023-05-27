@@ -135,6 +135,7 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
           }
         }
         // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+        console.log("gen pub key")
         BallotManager.generatePublicKey().then(() => {
           console.log("ret. generatePublicKey")
           // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
