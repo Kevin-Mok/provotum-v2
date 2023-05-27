@@ -16,6 +16,7 @@ import { BallotManager } from '../utils/ballotManager'
 import { createAccount } from '../utils/rpc'
 import { getNumberOfConnectedAuthorities } from '../utils/web3'
 import { VotingState } from './state'
+import { sealerUrls } from './sealers'
 
 const TOO_EARLY: string = 'We are in the REGISTRATION stage. Please wait with the deployment!'
 const BALLOT_DEPLOYED_SUCCESS_MESSAGE: string = 'Ballot successfully deployed. System parameters successfully set.'
@@ -124,8 +125,12 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
         console.log("ret. setSystemParameters")
         // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
 
-        const response: AxiosResponse = await axios.post("http://localhost:4011/generateKeys")
+        // const response: AxiosResponse = await axios.post("http://localhost:4011/generateKeys")
         console.log("ret. gen key 1")
+        for (const url of sealerUrls) {
+          const response: AxiosResponse = await axios.post(`${url}/generateKeys`)
+          console.log(`generated key for ${url}`)
+        }
         res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
         if (!(response.status === 201)) {
           throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
