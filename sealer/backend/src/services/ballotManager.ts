@@ -112,6 +112,9 @@ export const submitPublicKeyShare = async (
     console.log("getNrOfPublicKeyShares")
     let nrOfPublicKeyShares = await getNrOfPublicKeyShares() 
     console.log(nrOfPublicKeyShares)
+    console.log("getPublicKeyShares")
+    let publicKeyShares = await getPublicKeyShares() 
+    console.log(publicKeyShares)
     const txData = await contract.methods.submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d)).encodeABI()
     // const rawTxOptions = {
       // nonce: await Account.getAccountNonce(),
@@ -130,6 +133,10 @@ export const submitPublicKeyShare = async (
     console.log("getNrOfPublicKeyShares")
     nrOfPublicKeyShares = await getNrOfPublicKeyShares() 
     console.log(nrOfPublicKeyShares)
+
+    console.log("getPublicKeyShares")
+    publicKeyShares = await getPublicKeyShares() 
+    console.log(publicKeyShares)
     // console.log(rawTxOptions)
     // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
     // console.log("Signing transaction...");
@@ -191,6 +198,16 @@ export const getNrOfPublicKeyShares = async (): Promise<number> => {
   const contract = getContract()
   try {
     return parseInt(await contract.methods.getNrOfPublicKeyShares().call())
+  } catch (error) {
+    console.log(error)
+    throw new Error('The number of public key shares could not be fetched.')
+  }
+}
+
+export const getPublicKeyShares = async (): Promise<number> => {
+  const contract = getContract()
+  try {
+    return await contract.methods.getPublicKeyShares().call()
   } catch (error) {
     console.log(error)
     throw new Error('The number of public key shares could not be fetched.')

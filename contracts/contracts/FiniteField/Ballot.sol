@@ -406,6 +406,11 @@ contract Ballot {
         return election.publicKeyShareWallet.length;
     }
 
+    // get the total number of public key shares
+    function getPublicKeyShares() public view returns (address  [] memory) {
+        return election.publicKeyShareWallet;
+    }
+
     // get combined public key of the system
     function getPublicKey() public view onlyIfPubKeySet returns (uint256) {
         return publicKey;
