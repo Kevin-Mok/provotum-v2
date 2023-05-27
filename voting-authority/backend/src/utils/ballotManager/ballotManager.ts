@@ -106,29 +106,32 @@ export const generatePublicKey = async (): Promise<void> => {
   // const authAcc = await getAuthAccount()
   try {
     // await contract.methods.generatePublicKey().send({ from: authAcc, gas: GAS_LIMIT })
-    const txData = await contract.methods.generatePublicKey().encodeABI()
-    const rawTxOptions = {
-      nonce: await getAccountNonce(),
-      from: account.address,
-      to: getValueFromDB(BALLOT_ADDRESS_TABLE), //public tx
-      data: txData, // contract binary appended with initialization value
+    let txData = await contract.methods.getNrOfPublicKeyShares().encodeABI()
+    await sendTx(txData)
+    txData = await contract.methods.generatePublicKey().encodeABI()
+    await sendTx(txData)
+    // const rawTxOptions = {
+      // nonce: await getAccountNonce(),
+      // from: account.address,
+      // to: getValueFromDB(BALLOT_ADDRESS_TABLE), //public tx
+      // data: txData, // contract binary appended with initialization value
 
-      // maxPriorityFeePerGas: '0x3B9ACA00',
-      // maxFeePerGas: '0x2540BE400',
-      // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
-      gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 10
-      gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
-    };
-    console.log(rawTxOptions)
-    const tx = new Tx(rawTxOptions, {'chain':'goerli'});
-    console.log("Signing transaction...");
-    tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
-    console.log("Serializing transaction...");
-    var serializedTx = tx.serialize();
-    console.log("Sending transaction...");
-    const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
-    console.log("tx transactionHash: " + pTx.transactionHash);
-    // return pTx.contractAddress
+      // // maxPriorityFeePerGas: '0x3B9ACA00',
+      // // maxFeePerGas: '0x2540BE400',
+      // // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
+      // gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 10
+      // gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
+    // };
+    // console.log(rawTxOptions)
+    // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+    // console.log("Signing transaction...");
+    // tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    // console.log("Serializing transaction...");
+    // var serializedTx = tx.serialize();
+    // console.log("Sending transaction...");
+    // const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
+    // console.log("tx transactionHash: " + pTx.transactionHash);
+    // // return pTx.contractAddress
   } catch (error) {
     throw new Error('The public key of the system could not be created.')
   }

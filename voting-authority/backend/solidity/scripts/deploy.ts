@@ -38,7 +38,8 @@ const deploy = async (
     const contractInit = web3.eth.abi.encodeParameters(['string', 'uint256', 'address[]'], [votingQuestion, numAuthNodesInit, privAddresses]).slice(2);
     console.log(contractInit)
     // console.log(bytecode)
-    let txData = '0x'+bytecode+contractInit
+    // let txData = '0x'+bytecode+contractInit
+    let txData = bytecode+contractInit
     // console.log(bytecode)
     // let txData = '0x'+bytecode
     // txData = txData

@@ -1,4 +1,5 @@
-pragma solidity ^0.5.3;
+// pragma solidity ^0.8.4;
+pragma solidity ^0.8.4;
 
 import './VoteProofVerifier.sol';
 import './SumProofVerifier.sol';
@@ -169,6 +170,8 @@ contract Ballot {
         IS_PARAMETERS_SET = true;
     }
 
+    error InvalidSealerKeyNumber(uint256 shares, uint256 authorities);
+
     // generates the public key of the elgamal crypto system
     // - the public key is generated from all submitted public key shares by the sealer nodes
     // - their product forms the public key
@@ -177,10 +180,16 @@ contract Ballot {
         require(!IS_PUBKEY_SET, 'The public key is already set.');
 
         // every sealer needs to have published it's public key share
-        require(
-            election.publicKeyShareWallet.length == NR_OF_AUTHORITY_NODES,
-            'Public key shares !== number of authorities.'
-        );
+        // require(
+            // election.publicKeyShareWallet.length == NR_OF_AUTHORITY_NODES,
+            // 'Public key shares !== number of authorities.'
+        // );
+        if(election.publicKeyShareWallet.length !=
+           NR_OF_AUTHORITY_NODES)
+            revert InvalidSealerKeyNumber({
+                shares: election.publicKeyShareWallet.length,
+                authorities: NR_OF_AUTHORITY_NODES
+            });
 
         // set an initial key (here, we take the first)
         address firstSealerAddress = election.publicKeyShareWallet[0];

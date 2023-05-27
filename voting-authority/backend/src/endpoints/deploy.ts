@@ -130,35 +130,19 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
         for (const url of sealerUrls) {
           const response: AxiosResponse = await axios.post(`${url}/generateKeys`)
           console.log(`generated key for ${url}`)
+          if (!(response.status === 201)) {
+            throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
+          }
         }
-        res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
-        if (!(response.status === 201)) {
-          throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
-        }
+        // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+        BallotManager.generatePublicKey().then(() => {
+          console.log("ret. generatePublicKey")
+          // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+        })
       })
     })
     .catch((error: Error) => res.status(500).json({ msg: error.message }))
 
-  // try {
-    // const response: AxiosResponse = await axios.post("http://localhost:4011/generateKeys")
-    // console.log("ret. gen key 1")
-    // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
-    // if (!(response.status === 201)) {
-      // throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
-    // }
-  // } catch (error) {
-    // // console.log(error)
-    // throw new Error(`Something went wrong with key generation. ${error.message}`)
-  // }
-  // try {
-    // const response: AxiosResponse = await axios.post("http://localhost:4012/generateKeys")
-    // if (!(response.status === 201)) {
-      // throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
-    // }
-  // } catch (error) {
-    // // console.log(error)
-    // throw new Error(`Something went wrong with key generation. ${error.message}`)
-  // }
   // try {
     // BallotManager.generatePublicKey().then(() => {
       // console.log("ret. generatePublicKey")

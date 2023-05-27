@@ -1,4 +1,4 @@
-pragma solidity ^0.5.3;
+pragma solidity ^0.8.4;
 
 // Modulo math function used by the contracts in the eVoting system
 library ModuloMathLib {
@@ -26,7 +26,6 @@ library ModuloMathLib {
     /// "a" and "p" must be co-prime.
     /// @param a The number.
     /// @param p The modulus.
-    /// @return x such that ax = 1 (mod p)
     // inspired by: https://github.com/stonecoldpat/anonymousvoting/blob/master/LocalCrypto.sol
     function modInv(uint256 a, uint256 p) public pure returns (uint256 res) {
         if (a == 0 || a == p || p == 0) revert();
