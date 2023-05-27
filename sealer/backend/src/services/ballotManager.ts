@@ -109,6 +109,9 @@ export const submitPublicKeyShare = async (
   const contract = getContract()
   // const account = await getAuthAccount()
   try {
+    console.log("getNrOfPublicKeyShares")
+    let nrOfPublicKeyShares = await getNrOfPublicKeyShares() 
+    console.log(nrOfPublicKeyShares)
     const txData = await contract.methods.submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d)).encodeABI()
     // const rawTxOptions = {
       // nonce: await Account.getAccountNonce(),
@@ -124,6 +127,9 @@ export const submitPublicKeyShare = async (
       // gasLimit: "0xF4240" //max number of gas units the tx is allowed to use
     // };
     await sendTx(txData)
+    console.log("getNrOfPublicKeyShares")
+    nrOfPublicKeyShares = await getNrOfPublicKeyShares() 
+    console.log(nrOfPublicKeyShares)
     // console.log(rawTxOptions)
     // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
     // console.log("Signing transaction...");

@@ -270,6 +270,8 @@ contract Ballot {
     // SEALER core functions
     // /////////////////////////////////
 
+    error SealerSubmitted();
+
     // submit the public key share from the distributed key generation
     function submitPublicKeyShare(uint256 key, uint256 proof_c, uint256 proof_d)
         external
@@ -290,6 +292,7 @@ contract Ballot {
         for (uint256 i; i < election.publicKeyShareWallet.length; i++) {
             if (election.publicKeyShareWallet[i] == msg.sender) {
                 sealerAlreadySubmitted = true;
+                revert SealerSubmitted();
             }
         }
 

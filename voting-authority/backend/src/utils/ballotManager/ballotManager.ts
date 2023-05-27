@@ -106,10 +106,10 @@ export const generatePublicKey = async (): Promise<void> => {
   // const authAcc = await getAuthAccount()
   try {
     // await contract.methods.generatePublicKey().send({ from: authAcc, gas: GAS_LIMIT })
-    console.log("getNrOfPublicKeyShares")
     let txData = await contract.methods.getNrOfPublicKeyShares().encodeABI()
     // await sendTx(txData)
     // const nrOfPublicKeyShares = await contract.methods.getNrOfPublicKeyShares().call()
+    console.log("getNrOfPublicKeyShares")
     const nrOfPublicKeyShares = await getNrOfPublicKeyShares() 
     console.log(nrOfPublicKeyShares)
     console.log("generatePublicKey")
