@@ -20,7 +20,15 @@ const AppManager: React.FC = () => {
   const [contract, setContract] = useState<string>('')
 
   const setupDone = (): boolean => {
-    return state.isAuthenticated() && state.isTokenSet() && state.isWalletSet() && state.isBallotContractAddressSet()
+    // return state.isAuthenticated() && state.isTokenSet() && state.isWalletSet() && state.isBallotContractAddressSet()
+    const done = state.isAuthenticated() &&
+        state.isWalletSet() &&
+        state.isBallotContractAddressSet()
+    console.log(`isAuthenticated: ${state.isAuthenticated()}`)
+    console.log(`walletSet: ${state.isWalletSet()}, ${state.getWallet()}`)
+    console.log(`contractSet: ${state.isBallotContractAddressSet()}`)
+    console.log(`setupDone: ${done}`)
+    return done
   }
 
   // check what values are already in local storage
@@ -29,9 +37,9 @@ const AppManager: React.FC = () => {
       state.setAuthenicated(true)
     }
 
-    if (state.isTokenSet()) {
-      state.setToken(state.getToken())
-    }
+    // if (state.isTokenSet()) {
+      // state.setToken(state.getToken())
+    // }
 
     if (state.isWalletSet()) {
       state.setWallet(state.getWallet())

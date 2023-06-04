@@ -50,6 +50,7 @@ router.post('/register', async (req, res) => {
   try {
     const response = await axios.get(`${serverConfig.authUrl}/state`)
     state = response.data.state
+    console.log(state)
   } catch (error) {
     throw new Error('Could not fetch state from authority.')
   }
@@ -67,10 +68,10 @@ router.post('/register', async (req, res) => {
   }
 
   // verify that the provided token is valid and has not already been used
-  if (!verifyVoterToken(voterToken)) {
-    res.status(400).json({ success: false, msg: TOKEN_INVALID })
-    return
-  }
+  // if (!verifyVoterToken(voterToken)) {
+    // res.status(400).json({ success: false, msg: TOKEN_INVALID })
+    // return
+  // }
 
   // get ballot address from voting authority backend (to later return it to the user so that he can cast his vote)
   // If this is reached, then the ballot is for sure deployed and open, therefore we can return it at the end
@@ -87,43 +88,43 @@ router.post('/register', async (req, res) => {
   }
 
   // create access provider account and unlock it if this not already happened
-  if (!getListFromDB(DOES_ACCOUNT_EXIST)) {
-    let accountAddress: string = ''
-    try {
-      accountAddress = await createAccount(
-        serverConfig.nodeUrl,
-        serverConfig.accountPassword,
-        serverConfig.accountPassword
-      )
-    } catch (error) {
-      res.status(500).json({ msg: ACCOUNT_CREATION_FAILED, error: error.message })
-      return
-    }
+  // if (!getListFromDB(DOES_ACCOUNT_EXIST)) {
+    // let accountAddress: string = ''
+    // try {
+      // accountAddress = await createAccount(
+        // serverConfig.nodeUrl,
+        // serverConfig.accountPassword,
+        // serverConfig.accountPassword
+      // )
+    // } catch (error) {
+      // res.status(500).json({ msg: ACCOUNT_CREATION_FAILED, error: error.message })
+      // return
+    // }
 
-    if (accountAddress !== serverConfig.accountAddress) {
-      res.status(500).json({
-        msg: ACCOUNT_CREATION_FAILED,
-        expectedAddress: serverConfig.accountAddress,
-        createdAddress: accountAddress,
-      })
-      return
-    }
+    // if (accountAddress !== serverConfig.accountAddress) {
+      // res.status(500).json({
+        // msg: ACCOUNT_CREATION_FAILED,
+        // expectedAddress: serverConfig.accountAddress,
+        // createdAddress: accountAddress,
+      // })
+      // return
+    // }
 
-    try {
-      await unlockAccountRPC(serverConfig.nodeUrl, serverConfig.accountPassword, serverConfig.accountAddress)
-    } catch (error) {
-      res.status(500).json({ msg: ACCOUNT_UNLOCK_FAILED, error: error.message })
-      return
-    }
-  }
+    // try {
+      // await unlockAccountRPC(serverConfig.nodeUrl, serverConfig.accountPassword, serverConfig.accountAddress)
+    // } catch (error) {
+      // res.status(500).json({ msg: ACCOUNT_UNLOCK_FAILED, error: error.message })
+      // return
+    // }
+  // }
 
   // fund wallet of voter
-  try {
-    await fundWallet(voterAddress)
-  } catch (error) {
-    res.status(500).json({ msg: error.message })
-    return
-  }
+  // try {
+    // await fundWallet(voterAddress)
+  // } catch (error) {
+    // res.status(500).json({ msg: error.message })
+    // return
+  // }
 
   // store used token and address of registered voter
   addToList(USED_TOKENS_TABLE, [voterToken])

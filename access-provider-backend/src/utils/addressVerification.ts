@@ -8,5 +8,7 @@ export const hasAddressAlreadyBeenRegistered = (table: string, address: string):
 }
 
 export const verifyAddress = (table: string, address: string): boolean => {
+  console.log(`isAddy: ${address}, ${web3.utils.isAddress(address)}`)
+  console.log(`registered: ${hasAddressAlreadyBeenRegistered(table, address)}`)
   return web3.utils.isAddress(address) && hasAddressAlreadyBeenRegistered(table, address)
 }
