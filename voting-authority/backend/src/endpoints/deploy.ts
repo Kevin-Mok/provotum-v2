@@ -134,15 +134,15 @@ router.post('/deploy', async (req: express.Request, res: express.Response) => {
             throw new Error(`POST /generateKeys failed -> Status Code: ${response.status}`)
           }
         }
-        // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
-        console.log("gen pub key")
-        BallotManager.generatePublicKey().then(async () => {
-          console.log("ret. generatePublicKey")
-          await BallotManager.openBallot()
-            // const isBallotOpenBool = await BallotManager.isBallotOpen()
-            // console.log(`ballot open: ${isBallotOpenBool}`)
-          res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
-        })
+        res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+        // console.log("gen pub key")
+        // BallotManager.generatePublicKey().then(async () => {
+          // console.log("ret. generatePublicKey")
+          // await BallotManager.openBallot()
+            // // const isBallotOpenBool = await BallotManager.isBallotOpen()
+            // // console.log(`ballot open: ${isBallotOpenBool}`)
+          // res.status(201).json({ address: address, msg: BALLOT_DEPLOYED_SUCCESS_MESSAGE })
+        // })
       })
     })
     .catch((error: Error) => res.status(500).json({ msg: error.message }))

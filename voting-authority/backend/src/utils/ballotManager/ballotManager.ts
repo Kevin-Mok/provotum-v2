@@ -273,7 +273,7 @@ export const combineDecryptedShares = async (): Promise<boolean> => {
  */
 export const getVoteResult = async (): Promise<number> => {
   const contract = getContract()
-  const authAcc = await getAuthAccount()
+  // const authAcc = await getAuthAccount()
   try {
     return await contract.methods.getVoteResult().call({ from: authAcc })
   } catch (error) {
@@ -286,9 +286,10 @@ export const getVoteResult = async (): Promise<number> => {
  */
 export const getNumberOfVotes = async (): Promise<number> => {
   const contract = getContract()
-  const authAcc = await getAuthAccount()
+  // const authAcc = await getAuthAccount()
   try {
-    return await contract.methods.getNumberOfVotes().call({ from: authAcc })
+    // return await contract.methods.getNumberOfVotes().call({ from: authAcc })
+    return await contract.methods.getNumberOfVotes().call()
   } catch (error) {
     throw new Error('The number of votes could not be assessed.')
   }

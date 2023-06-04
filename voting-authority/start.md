@@ -1,5 +1,5 @@
-# Backend
+BE
 npm run serve:localhost
 
-# FE 
+FE 
 npm run start:localhost
