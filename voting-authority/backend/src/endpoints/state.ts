@@ -30,6 +30,7 @@ const router: express.Router = express.Router()
 // ----------------------------------------------------------------------------------------------------
 router.get('/state', async (req, res) => {
   const currentState: string = getValueFromDB(STATE_TABLE) as string
+  console.log(`curState: ${currentState}`)
   // const currentState: string = VotingState.PAIRING
   // const currentState: string = VotingState.KEY_GENERATION
   const votingQuestion: string = getValueFromDB(VOTING_QUESTION_TABLE)
