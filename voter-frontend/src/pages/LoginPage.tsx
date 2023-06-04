@@ -20,16 +20,48 @@ const LoginPage: React.FC = () => {
   const voterState = useVoterStore()
   const [loading, setLoading] = useState(false)
   const [hasProvider, setHasProvider] = useState<boolean | null>(null)
+  const initialState = { accounts: [] }               /* New */
+  const [wallet, setWallet] = useState(initialState)  /* New */
 
   useEffect(() => {
+    const refreshAccounts = (accounts: any) => {                /* New */
+      if (accounts.length > 0) {                                /* New */
+        updateWallet(accounts)                                  /* New */
+      } else {                                                  /* New */
+        // if length 0, user is disconnected                    /* New */
+        setWallet(initialState)                                 /* New */
+      }                                                         /* New */
+    }   
     const getProvider = async () => {
       const provider = await detectEthereumProvider({ silent: true })
       console.log(provider)
       setHasProvider(Boolean(provider)) // transform provider to true or false
+
+      if (provider) {                                           /* New */
+        const accounts = await window.ethereum.request(         /* New */
+          { method: 'eth_accounts' }                            /* New */
+        )                                                       /* New */
+        refreshAccounts(accounts)                               /* New */
+        window.ethereum.on('accountsChanged', refreshAccounts)  /* New */
+      }   
     }
 
     getProvider()
+    // return () => {                                              /* New */
+      // window.ethereum?.removeListener('accountsChanged', refreshAccounts)
+    // }
   }, [])
+
+  const updateWallet = async (accounts:any) => {     /* New */
+    setWallet({ accounts })                          /* New */
+  }                                                  /* New */
+
+  const handleConnect = async () => {                /* New */
+    let accounts = await window.ethereum.request({   /* New */
+      method: "eth_requestAccounts",                 /* New */
+    })                                               /* New */
+    updateWallet(accounts)                           /* New */
+  }   
 
   const handleLogin = async (username: string, password: string): Promise<void> => {
     try {
@@ -53,9 +85,13 @@ const LoginPage: React.FC = () => {
   // return <LoginForm onLogin={handleLogin} loading={loading} />
   return (
     <div className="App">
-      <h2>Injected Provider { injectedProvider ? 'DOES' : 'DOES NOT'} Exist</h2>
-      { isMetaMask && 
-        <button>Connect MetaMask</button>
+      <h2>MetaMask { injectedProvider ? '' : 'Not'} Installed</h2>
+      { window.ethereum.isMetaMask && wallet.accounts.length < 1 &&  /* Updated */
+        <button onClick={handleConnect}>Connect MetaMask</button>
+      }
+
+      { wallet.accounts.length > 0 &&                /* New */
+        <div>Wallet Accounts: { wallet.accounts[0] }</div>
       }
     </div>
   )
