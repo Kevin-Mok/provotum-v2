@@ -60,6 +60,7 @@ export const LoadingPage: React.FC = () => {
     await delay(LOADING_DELAY)
     try {
       const response = await AccessProviderService.fundWallet(voterState.token, account)
+      console.log(`fund wallet response: ${response}`)
       voterState.setBallotContractAddress(response.ballot)
       return response.ballot
     } catch (error) {
@@ -108,6 +109,7 @@ export const LoadingPage: React.FC = () => {
     nextStep()
     const ballot = await fundWallet(voterState.getWallet())
     nextStep()
+    console.log(`con.addy: ${ballot}`)
     voterState.setBallotContractAddress(ballot)
   }
 

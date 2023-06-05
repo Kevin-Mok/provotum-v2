@@ -21,17 +21,23 @@ const VotingPage: React.FC = () => {
 
   const initializePage = async (): Promise<void> => {
     // get web3 context and the ballot contract
+    console.log(state)
     const web3: Web3 = await getWeb3(state.getConnectionNodeUrl())
+    console.log(`node url: ${state.getConnectionNodeUrl()}`)
     //@ts-ignore
     const contract = new web3.eth.Contract(BallotContract.abi, state.getBallotContractAddress())
+    console.log(`contract: ${contract}`)
     setBallot(contract)
     // query the balance of the voter wallet
     const balance = await web3.eth.getBalance(state.getWallet())
     setBalance(balance)
+    console.log(`balance: ${balance}`)
 
     // get the voting question to display
     const question = await contract.methods.getVotingQuestion().call({ from: state.getBallotContractAddress() })
+    // const question = await contract.methods.getVotingQuestion().call()
     setVotingQuestion(question)
+    console.log(`question: ${question}`)
   }
 
   useEffect(() => {

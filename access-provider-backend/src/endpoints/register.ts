@@ -128,7 +128,10 @@ router.post('/register', async (req, res) => {
 
   // store used token and address of registered voter
   addToList(USED_TOKENS_TABLE, [voterToken])
-  addToList(REGISTERED_VOTERS_TABLE, [voterAddress])
+  const registeredAddressess = getListFromDB(REGISTERED_VOTERS_TABLE)
+  if (!registeredAddressess.includes(voterAddress)) {
+      addToList(REGISTERED_VOTERS_TABLE, [voterAddress])
+  }
 
   res.status(201).json({ success: true, msg: SUCCESS_MSG, ballot: ballotAddress })
 })

@@ -33,6 +33,8 @@ const AppManager: React.FC = () => {
 
   // check what values are already in local storage
   useEffect(() => {
+    state.logout()
+
     if (state.isAuthenticated()) {
       state.setAuthenicated(true)
     }
@@ -74,6 +76,7 @@ const AppManager: React.FC = () => {
       case VotingState.KEY_GENERATION:
         return <NotOpen />
       case VotingState.VOTING:
+        // state.logout()
         if (!state.authenticated) {
           return <LoginPage />
         } else if (!setupDone()) {
