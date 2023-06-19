@@ -65,8 +65,12 @@ const getContractParameters = async (contract: any): Promise<[BN, FFelGamal.Syst
 
   try {
     const paramsFromContract = await contract.methods.getParameters().call()
+    console.log(`paramsFromContract: ${paramsFromContract}`)
 
     systemParameters = toSystemParams(paramsFromContract)
+    // systemParameters = paramsFromContract
+    console.log(`to sys. params: ${systemParameters}`)
+    console.log(`to sys. params p BN: ${systemParameters.p instanceof BN}`)
   } catch (error) {
     throw new Error(`Unable to get system parameters from contract: ${error.message}`)
   }
@@ -88,6 +92,11 @@ const getContractParameters = async (contract: any): Promise<[BN, FFelGamal.Syst
  */
 export const castYesVote = async (contract: any, voterState: any): Promise<string> => {
   const [publicKey, systemParameters] = await getContractParameters(contract)
+  console.log(`pub. key: ${publicKey}`)
+  console.log(`params: ${systemParameters}`)
+  console.log(`params p BN: ${systemParameters.p instanceof BN}`)
+  console.log(`params q BN: ${systemParameters.q instanceof BN}`)
+  console.log(`params g BN: ${systemParameters.g instanceof BN}`)
   const vote = FFelGamal.Voting.generateYesVote(systemParameters, publicKey)
   const proof = FFelGamal.Proof.Membership.generateYesProof(vote, systemParameters, publicKey, voterState.wallet)
 

@@ -74,6 +74,7 @@ const VotingPanel: React.FC<Props> = ({ contract }) => {
           setSubmissionState(SubmissionState.CONFIRMED)
         } catch (error) {
           setMessage(`Unable to submit your vote.`)
+          console.log(error)
           setSubmissionState(SubmissionState.NOT_CONFIRMED)
         }
         break
