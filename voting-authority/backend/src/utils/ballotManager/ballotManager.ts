@@ -212,9 +212,13 @@ const sendTx = async (txData) => {
  */
 export const closeBallot = async (): Promise<void> => {
   const contract = getContract()
-  const authAcc = await getAuthAccount()
+  // const authAcc = await getAuthAccount()
   try {
-    await contract.methods.closeBallot().send({ from: authAcc, gas: GAS_LIMIT })
+    const txData = await contract.methods.closeBallot().encodeABI()
+    await sendTx(txData)
+    const isBallotOpenBool = await isBallotOpen()
+    console.log(`ballot open: ${isBallotOpenBool}`)
+    // await contract.methods.closeBallot().send({ from: authAcc, gas: GAS_LIMIT })
   } catch (error) {
     throw new Error('The Ballot could no be closed.')
   }
