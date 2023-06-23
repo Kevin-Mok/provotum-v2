@@ -32,9 +32,12 @@ import { delay } from '../../util/helper'
 
 interface Props {
   contract: any
+  contractAddress: string
+  walletAddress: string
 }
 
-const VotingPanel: React.FC<Props> = ({ contract }) => {
+// const VotingPanel: React.FC<Props> = ({ contract, contractAddress, walletAddress }) => {
+const VotingPanel: React.FC<Props> = ({ contract, contractAddress, walletAddress }) => {
   const [selectedVote, setSelectedVote] = useState<VotingOption>(VotingOption.UNSPEC)
   const [submissionState, setSubmissionState] = useState(SubmissionState.NOT_CONFIRMED)
   const [message, setMessage] = useState('Please submit a vote below')
@@ -59,7 +62,7 @@ const VotingPanel: React.FC<Props> = ({ contract }) => {
     switch (selectedVote) {
       case VotingOption.YES:
         try {
-          const res: any = await BallotService.castYesVote(contract, voterState)
+          const res: any = await BallotService.castYesVote(contract, contractAddress, walletAddress, voterState)
           const voteTx = {
             blockHash: res.blockHash,
             blockNumber: res.blockNumber,
@@ -80,7 +83,8 @@ const VotingPanel: React.FC<Props> = ({ contract }) => {
         break
       case VotingOption.NO:
         try {
-          const res: any = await BallotService.castNoVote(contract, voterState)
+          // const res: any = await BallotService.castNoVote(contract, voterState)
+          const res: any = await BallotService.castNoVote(contract, contractAddress, walletAddress, voterState)
           const voteTx = {
             blockHash: res.blockHash,
             blockNumber: res.blockNumber,

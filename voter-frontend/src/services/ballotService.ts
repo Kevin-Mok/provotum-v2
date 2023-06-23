@@ -35,20 +35,37 @@ const submitVote = async (
   proof: FFelGamal.Proof.MembershipProof,
   vote: FFelGamal.Cipher,
   contract: any,
+  contractAddress: string,
+  walletAddress: string,
   voterState: any
 ): Promise<string> => {
   try {
-    await unlockAccountRPC(voterState.getConnectionNodeUrl(), 'securePassword', voterState.getWallet())
-    const res = await contract.methods
-      .vote(
+    // await unlockAccountRPC(voterState.getConnectionNodeUrl(), 'securePassword', voterState.getWallet())
+    // const res = await contract.methods
+      // .vote(
+        // [toHex(vote.a), toHex(vote.b)],
+        // [toHex(proof.a0), toHex(proof.a1)],
+        // [toHex(proof.b0), toHex(proof.b1)],
+        // [toHex(proof.c0), toHex(proof.c1)],
+        // [toHex(proof.f0), toHex(proof.f1)]
+      // )
+      // .send({ from: voterState.wallet })
+    // return res
+  const transactionParameters = {
+    to: contractAddress, // Required except during contract publications.
+    from: walletAddress, // must match user's active address.
+    data: contract.methods.vote(
         [toHex(vote.a), toHex(vote.b)],
         [toHex(proof.a0), toHex(proof.a1)],
         [toHex(proof.b0), toHex(proof.b1)],
         [toHex(proof.c0), toHex(proof.c1)],
         [toHex(proof.f0), toHex(proof.f1)]
-      )
-      .send({ from: voterState.wallet })
-    return res
+        ).encodeABI(),
+  };
+    return await window.ethereum.request({
+      method: "eth_sendTransaction",
+      params: [transactionParameters],
+    });
   } catch (error) {
     throw new Error(`Vote submission failed: ${error.message}`)
   }
@@ -90,7 +107,7 @@ const getContractParameters = async (contract: any): Promise<[BN, FFelGamal.Syst
  * @param contract the solidity contract object
  * @param wallet ETH public key
  */
-export const castYesVote = async (contract: any, voterState: any): Promise<string> => {
+export const castYesVote = async (contract: any, contractAddress: string, walletAddress: string, voterState: any): Promise<string> => {
   const [publicKey, systemParameters] = await getContractParameters(contract)
   console.log(`pub. key: ${publicKey}`)
   console.log(`params: ${systemParameters}`)
@@ -101,7 +118,7 @@ export const castYesVote = async (contract: any, voterState: any): Promise<strin
   const proof = FFelGamal.Proof.Membership.generateYesProof(vote, systemParameters, publicKey, voterState.wallet)
 
   try {
-    return await submitVote(proof, vote, contract, voterState)
+    return await submitVote(proof, vote, contract, contractAddress, walletAddress, voterState)
   } catch (error) {
     throw new Error(`Could not send vote and proof to contract: ${error.message}`)
   }
@@ -113,14 +130,16 @@ export const castYesVote = async (contract: any, voterState: any): Promise<strin
  * @param contract the solidity contract object
  * @param wallet ETH public key
  */
-export const castNoVote = async (contract: any, voterState: any): Promise<string> => {
+// export const castNoVote = async (contract: any, voterState: any): Promise<string> => {
+export const castNoVote = async (contract: any, contractAddress: string, walletAddress: string, voterState: any): Promise<string> => {
   const [publicKey, systemParameters] = await getContractParameters(contract)
   // generate and submit noVote
   const vote = FFelGamal.Voting.generateNoVote(systemParameters, publicKey)
   const proof = FFelGamal.Proof.Membership.generateNoProof(vote, systemParameters, publicKey, voterState.wallet)
 
   try {
-    return await submitVote(proof, vote, contract, voterState)
+    // return await submitVote(proof, vote, contract, voterState)
+    return await submitVote(proof, vote, contract, contractAddress, walletAddress, voterState)
   } catch (error) {
     throw new Error(`Could not send vote and proof to contract: ${error.message}`)
   }

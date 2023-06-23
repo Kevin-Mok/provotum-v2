@@ -26,6 +26,9 @@ const VotingPage: React.FC = () => {
     console.log(`node url: ${state.getConnectionNodeUrl()}`)
     //@ts-ignore
     const contract = new web3.eth.Contract(BallotContract.abi, state.getBallotContractAddress())
+    // const contract = new web3.eth.Contract(BallotContract.abi, state.getBallotContractAddress())
+    // const contract = [state.getBallotContractAddress(), BallotContract.abi]
+    // const contractInfo = [state.getBallotContractAddress(), BallotContract.abi]
     console.log(`contract: ${contract}`)
     setBallot(contract)
     // query the balance of the voter wallet
@@ -49,7 +52,7 @@ const VotingPage: React.FC = () => {
       <Header />
       <div className={classes.root}>
         <Question votingQuestion={votingQuestion} />
-        <VotingPanel contract={ballot} />
+        <VotingPanel contract={ballot}  contractAddress={state.contractAddress} walletAddress={state.wallet} />
         <ChainInfo contractAddress={state.contractAddress} walletAddress={state.wallet} balance={balance} />
       </div>
       <Footer />
