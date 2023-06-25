@@ -10,12 +10,17 @@ const router: express.Router = express.Router()
 router.post('/decrypt', async (req: express.Request, res: express.Response) => {
   try {
     // fetch state directly from contract instead of vote-auth backend
+    console.log("getBallotState post")
     let state: VotingState = await BallotManager.getBallotState()
+    console.log(`getBallotState: ${state}`)
     state = VotingState.TALLYING
+    console.log(`state: ${state}`)
 
     switch (state) {
       case VotingState.TALLYING: {
+        console.log("get all votes")
         const votesAsStrings = await BallotManager.getAllVotes()
+        console.log("got all votes")
         const votes: FFelGamal.Cipher[] = votesAsStrings.map(
           vote => ({ a: new BN(vote.a), b: new BN(vote.b) } as FFelGamal.Cipher)
         )

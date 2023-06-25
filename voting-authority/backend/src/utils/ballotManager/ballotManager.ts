@@ -25,7 +25,7 @@ const account = getAccount()
 const getContract = (): Contract => {
   const contractAddress: string = getValueFromDB(BALLOT_ADDRESS_TABLE)
   // const contractAddress = "0xA0623f2cECe0783b95a21267Ef5B17a73C598aBa"
-  console.log(contractAddress)
+  // console.log(contractAddress)
   const contract = new web3.eth.Contract(ballotContract.abi, contractAddress)
   return contract
 }
@@ -250,10 +250,13 @@ export const getNrOfPublicKeyShares = async (): Promise<number> => {
 
 export const getNumberOfDecryptedShares = async (): Promise<number> => {
   const contract = getContract()
-  const authAcc = await getAuthAccount()
+  // const authAcc = await getAuthAccount()
   try {
-    return parseInt(await contract.methods.getNrOfDecryptedShares().call({ from: authAcc }))
+    // return parseInt(await contract.methods.getNrOfDecryptedShares().call({ from: authAcc }))
+    const submittedDecryptedShares = parseInt(await contract.methods.getNrOfDecryptedShares().call())
+    return submittedDecryptedShares 
   } catch (error) {
+    console.log('The number of decrypted shares could not be assessed.')
     throw new Error('The number of decrypted shares could not be assessed.')
   }
 }

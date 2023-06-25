@@ -76,7 +76,9 @@ export const isBallotOpen = async (): Promise<boolean> => {
 export const getBallotState = async (): Promise<VotingState> => {
   const contract = getContract()
   try {
+    console.log("getBallotStatus")
     const status: string = await contract.methods.getBallotStatus().call()
+    console.log(`BallotStatus: ${status}`)
     // casting to state enum
     return (<any>VotingState)[status]
   } catch (error) {
@@ -235,9 +237,10 @@ export const getVoteResult = async (): Promise<number> => {
  */
 export const getNumberOfVotes = async (): Promise<number> => {
   const contract = getContract()
-  const authAcc = await getAuthAccount()
+  // const authAcc = await getAuthAccount()
   try {
-    return await contract.methods.getNumberOfVotes().call({ from: authAcc })
+    // return await contract.methods.getNumberOfVotes().call({ from: authAcc })
+    return await contract.methods.getNumberOfVotes().call()
   } catch (error) {
     console.log(error)
     throw new Error('The number of votes could not be assessed.')
