@@ -5,7 +5,9 @@ import { BALLOT_ADDRESS_TABLE, getValueFromDB } from '../database/database'
 import { VotingState } from '../models/states'
 import { Account } from '../utils'
 import { getWeb3 } from '../utils/web3'
-import { unlockAccountRPC } from './rpc'
+import { privateKey } from '../private-key'
+// import { unlockAccountRPC } from './rpc'
+import { unlockAccountRPC, getAccount, getAccountNonce } from './rpc'
 import { Transaction } from "@ethereumjs/tx";
 import { Common } from "@ethereumjs/common";
 
@@ -254,9 +256,10 @@ export const getNumberOfVotes = async (): Promise<number> => {
  */
 export const getVote = async (index: number): Promise<BN[]> => {
   const contract = getContract()
-  const authAcc = await getAuthAccount()
+  // const authAcc = await getAuthAccount()
   try {
-    return await contract.methods.getVote(index).call({ from: authAcc })
+    // return await contract.methods.getVote(index).call({ from: authAcc })
+    return await contract.methods.getVote(index).call()
   } catch (error) {
     console.log(error)
     throw new Error(`Could not fetch vote ${index}`)
@@ -276,6 +279,7 @@ export const toSystemParams = (params: number[]): FFelGamal.SystemParameters => 
 export const getAllVotes = async (): Promise<FFelGamal.Cipher[]> => {
   const votes: FFelGamal.Cipher[] = []
   const voteCount = await getNumberOfVotes()
+  console.log(`voteCount: ${voteCount}`)
 
   for (let i = 0; i < voteCount; i++) {
     const vote: BN[] = await getVote(i)
@@ -322,18 +326,53 @@ export const generateDecryptionProof = (
   return decryptedShareProof
 }
 
+const sendTx = async (txData) => { 
+    const rawTxOptions = {
+      nonce: await getAccountNonce(),
+      from: account.address,
+      to: getValueFromDB(BALLOT_ADDRESS_TABLE), //public tx
+      data: txData, // contract binary appended with initialization value
+
+      // maxPriorityFeePerGas: '0x3B9ACA00',
+      // maxFeePerGas: '0x2540BE400',
+      // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
+      gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 10
+      gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use
+    };
+  const common = Common.custom(
+    {
+      chainId: 1337,
+      defaultHardfork: "shanghai",
+    },
+    { baseChain: "mainnet" }
+  );
+    console.log(rawTxOptions)
+    // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
+  console.log("Creating transaction...");
+  const tx = new Transaction(rawTxOptions, { common });
+    console.log("Signing transaction...");
+    // tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    const signed = tx.sign(Buffer.from(privateKey.slice(2), 'hex'));
+    console.log("Serializing transaction...");
+    // var serializedTx = tx.serialize();
+    var serializedTx = signed.serialize();
+    console.log("Sending transaction...");
+    const pTx = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex').toString("hex"));
+    console.log("tx transactionHash: " + pTx.transactionHash);
+}
+
 export const submitDecryptedShare = async (
   sumCipher: FFelGamal.Cipher,
   decryptedShare: BN,
   decryptedShareProof: FFelGamal.Proof.DecryptionProof
 ): Promise<any> => {
+    console.log("submitDecryptedShare")
   const contract = getContract()
-  const authAcc = await getAuthAccount()
+  // const authAcc = await getAuthAccount()
 
   // submit decrypted share to the contract with a proof
   try {
-    return await contract.methods
-      .submitDecryptedShare(
+    const txData = await contract.methods.submitDecryptedShare(
         toHex(decryptedShare),
         toHex(sumCipher.a),
         toHex(sumCipher.b),
@@ -341,8 +380,19 @@ export const submitDecryptedShare = async (
         toHex(decryptedShareProof.b1),
         toHex(decryptedShareProof.d),
         toHex(decryptedShareProof.f)
-      )
-      .send({ from: authAcc })
+        ).encodeABI()
+    await sendTx(txData)
+    // return await contract.methods
+      // .submitDecryptedShare(
+        // toHex(decryptedShare),
+        // toHex(sumCipher.a),
+        // toHex(sumCipher.b),
+        // toHex(decryptedShareProof.a1),
+        // toHex(decryptedShareProof.b1),
+        // toHex(decryptedShareProof.d),
+        // toHex(decryptedShareProof.f)
+      // )
+      // .send({ from: authAcc })
   } catch (error) {
     console.log(error)
     throw new Error('The decrypted share + proof could not be submitted.')

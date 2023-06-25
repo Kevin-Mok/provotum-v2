@@ -26,6 +26,7 @@ router.post('/decrypt', async (req: express.Request, res: express.Response) => {
         )
 
         const systemParamsString: number[] = await BallotManager.getSystemParameters()
+        console.log(`systemParamsString: ${systemParamsString}`)
         const systemParams: FFelGamal.SystemParameters = {
           p: new BN(systemParamsString[0]),
           q: new BN(systemParamsString[1]),
@@ -33,12 +34,14 @@ router.post('/decrypt', async (req: express.Request, res: express.Response) => {
         }
 
         const sum = BallotManager.homomorphicallyAddVotes(votes, systemParams)
+        console.log(`homomorphic sum: ${sum}`)
 
         // read private key share from DB and convert back to BN
         const privateKeyShareString: string = getValueFromDB(PRIVATE_KEY_SHARE_TABLE)
         const privateKeyShare: BN = new BN(privateKeyShareString, 'hex')
 
         const decryptedShare = BallotManager.decryptShare(sum, systemParams, privateKeyShare)
+        console.log(`decryptedShare: ${decryptedShare}`)
 
         const proof = BallotManager.generateDecryptionProof(sum, systemParams, privateKeyShare)
 
