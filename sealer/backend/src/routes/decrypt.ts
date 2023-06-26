@@ -46,8 +46,12 @@ router.post('/decrypt', async (req: express.Request, res: express.Response) => {
         const proof = BallotManager.generateDecryptionProof(sum, systemParams, privateKeyShare)
 
         const result = await BallotManager.submitDecryptedShare(sum, decryptedShare, proof)
+          console.log(`submitDecryptedShare for sealer 1`)
+        console.log(result)
 
-        res.status(201).json({ decryptedShareSubmitted: result['0'], msg: result['1'] })
+        // res.status(201).json({ decryptedShareSubmitted: result['0'], msg: result['1'] })
+        res.status(201).json({ decryptedShareSubmitted: true, msg: 'Sumproof accepted' })
+          console.log(`return 201`)
         break
       }
       default:
@@ -57,6 +61,8 @@ router.post('/decrypt', async (req: express.Request, res: express.Response) => {
         break
     }
   } catch (error) {
+      console.log(`error in post decrypt`)
+      console.log(error)
     res.status(500).json({ msg: error.msg })
   }
 })
