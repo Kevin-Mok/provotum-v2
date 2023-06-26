@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import express from 'express'
+import axios, { AxiosResponse } from 'axios'
 
 import { parityConfig } from '../config'
 import {
@@ -13,6 +14,7 @@ import {
 } from '../database/database'
 import { BallotManager } from '../utils/ballotManager'
 import { getNumberOfConnectedAuthorities } from '../utils/web3'
+import { sealerUrls } from './sealers'
 
 export enum VotingState {
   REGISTRATION = 'REGISTRATION',
@@ -334,7 +336,21 @@ router.post('/state', async (req, res) => {
     case VotingState.VOTING: {
       try {
         await BallotManager.closeBallot()
+        console.log("closed ballot")
+        for (const url of sealerUrls) {
+          const response: AxiosResponse = await axios.post(`${url}/decrypt`)
+          console.log(`submitDecryptedShare for ${url}`)
+          if (!(response.status === 201)) {
+            throw new Error(`POST /submitDecryptedShare failed -> Status Code: ${response.status}`)
+          }
+        }
+          // const response: AxiosResponse = await axios.post(`http://localhost:4011/decrypt`)
+          // console.log(`submitDecryptedShare for ${url}`)
+          // if (!(response.status === 201)) {
+            // throw new Error(`POST /submitDecryptedShare failed -> Status Code: ${response.status}`)
+          // }
         await BallotManager.isBallotOpen()
+        
       } catch (error) {
         res.status(500).json({
           state: currentState,

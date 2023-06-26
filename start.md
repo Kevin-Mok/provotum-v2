@@ -1,5 +1,6 @@
 - Ganache 
 ./ganache-pv.sh
+- clear activity and nonce data (MM)
 
 - VA
 BE

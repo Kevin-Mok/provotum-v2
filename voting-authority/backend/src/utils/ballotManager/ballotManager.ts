@@ -267,9 +267,20 @@ export const getNumberOfDecryptedShares = async (): Promise<number> => {
  */
 export const combineDecryptedShares = async (): Promise<boolean> => {
   const contract = getContract()
-  const authAcc = await getAuthAccount()
+  // const authAcc = await getAuthAccount()
   try {
-    return await contract.methods.combineDecryptedShares().send({ from: authAcc, gas: GAS_LIMIT })
+    // return await contract.methods.combineDecryptedShares().send({ from: authAcc, gas: GAS_LIMIT })
+    // return await contract.methods.combineDecryptedShares().call()
+    let status = await contract.methods.getBallotStatus().call()
+    console.log(`pre-combineDecryptedShares status: ${status}`)
+    const numberOfDecryptedShares = parseInt(await contract.methods.getNrOfDecryptedShares().call())
+    console.log(`pre-combineDecryptedShares numberOfDecryptedShares: ${numberOfDecryptedShares}`)
+    const numVotes = await contract.methods.getNumberOfVotes().call()
+    console.log(`pre-combineDecryptedShares numVotes: ${numVotes}`)
+    await contract.methods.combineDecryptedShares().call()
+
+    status = await contract.methods.getBallotStatus().call()
+    console.log(`combineDecryptedShares status: ${status}`)
   } catch (error) {
     throw new Error('The decrypted shares could no be combined.')
   }
@@ -282,7 +293,10 @@ export const getVoteResult = async (): Promise<number> => {
   const contract = getContract()
   // const authAcc = await getAuthAccount()
   try {
-    return await contract.methods.getVoteResult().call({ from: authAcc })
+    // return await contract.methods.getVoteResult().call({ from: authAcc })
+    const status = await contract.methods.getBallotStatus().call()
+    console.log(`getVoteResult status: ${status}`)
+    return await contract.methods.getVoteResult().call()
   } catch (error) {
     throw new Error('The final voting result could not be fetched. Maybe the voting is still ongoing.')
   }
