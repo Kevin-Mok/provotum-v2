@@ -233,6 +233,8 @@ router.post('/state', async (req, res) => {
         // return
       // }
 
+    // await BallotManager.getVoteResult()
+    // await BallotManager.closeBallot()
       setValue(STATE_TABLE, VotingState.PAIRING)
       break
     }
@@ -270,6 +272,7 @@ router.post('/state', async (req, res) => {
         })
         return
       }
+        await BallotManager.combineDecryptedShares()
 
       // setValue(STATE_TABLE, VotingState.KEY_GENERATION)
       setValue(STATE_TABLE, VotingState.KEY_GENERATION)

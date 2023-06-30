@@ -4,6 +4,8 @@ import Web3 from 'web3'
 
 import { unlockAccountRPC } from '../util/rpc'
 
+// var BN = require("bn.js");
+
 /**
  * Create FFelGamal.SystemParameters from the returned numbers array from
  * the ballot contract
