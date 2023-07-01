@@ -92,6 +92,7 @@ export const LoadingPage: React.FC = () => {
   // go through every step of the loading process
   async function setup(): Promise<any> {
     const connectionURL = await AccessProviderService.getConnectionNodeUrl()
+    // const connectionURL = ''
     console.log(`connectionURL: ${connectionURL}`)
     voterState.setConnectionNodeUrl(connectionURL)
     const web3: Web3 = await getWeb3(connectionURL)

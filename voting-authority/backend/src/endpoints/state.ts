@@ -31,7 +31,8 @@ const router: express.Router = express.Router()
 // GET /state
 // ----------------------------------------------------------------------------------------------------
 router.get('/state', async (req, res) => {
-  const currentState: string = getValueFromDB(STATE_TABLE) as string
+  // const currentState: string = getValueFromDB(STATE_TABLE) as string
+  const currentState: string = VotingState.VOTING
   console.log(`curState: ${currentState}`)
   // const currentState: string = VotingState.PAIRING
   // const currentState: string = VotingState.KEY_GENERATION
@@ -215,7 +216,8 @@ router.get('/state', async (req, res) => {
 // POST /state
 // ----------------------------------------------------------------------------------------------------
 router.post('/state', async (req, res) => {
-  const currentState: string = getValueFromDB(STATE_TABLE) as string
+  // const currentState: string = getValueFromDB(STATE_TABLE) as string
+  const currentState: string = VotingState.VOTING
   const requiredAuthorities: number = parityConfig.numberOfAuthorityNodes
 
   switch (currentState) {

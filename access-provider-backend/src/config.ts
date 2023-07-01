@@ -6,7 +6,8 @@ config()
 export const serverConfig = {
   authUrl: `http://${process.env.VOTING_AUTH_BACKEND_IP}:${process.env.VOTING_AUTH_BACKEND_PORT}`,
   // nodeUrl: `http://${process.env.PARITY_NODE_IP}:${process.env.PARITY_NODE_PORT}`,
-    nodeUrl: 'http://127.0.0.1:8545',
+    // nodeUrl: 'http://127.0.0.1:8545',
+  nodeUrl: 'https://eth-goerli.g.alchemy.com/v2/xGFaw_LYv1Fg9dyHAiyVA4cUMOAApxZd',
   accountAddress: '0x004661de90cd1dcb998e8464a0f3c3da9f085950',
   accountPassword: 'access',
 }

@@ -166,7 +166,8 @@ router.get('/deploy', (req: express.Request, res: express.Response) => {
     console.log("isDeployed", isDeployed)
 
   if (isDeployed) {
-    const address: boolean = getValueFromDB(BALLOT_ADDRESS_TABLE) as boolean
+    // const address: boolean = getValueFromDB(BALLOT_ADDRESS_TABLE) as boolean
+    const address = "0xA0623f2cECe0783b95a21267Ef5B17a73C598aBa"
     console.log("contract addy: ", address)
     res.status(200).json({ address: address, msg: BALLOT_ALREADY_DEPLOYED_MESSAGE })
   } else {
