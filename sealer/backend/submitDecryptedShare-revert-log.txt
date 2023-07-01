@@ -1,0 +1,45 @@
+Error: Transaction has been reverted by the EVM:                                                                                                 
+{                                                                                                                                                
+  "blockHash": "0x2c2bd00a0d183f6a3fa5630caffa8ddb0e9632254c196a2e4eb0c43563f98b3c",                                                             
+  "blockNumber": 9274460,                                                                                                                        
+  "contractAddress": null,                                                                                                                       
+  "cumulativeGasUsed": 7012131,                                                                                                                  
+  "effectiveGasPrice": "0x3b9aca00",                                                                                                             
+  "from": "0x98b32c998f16e36cff94b430c656335d682e78dd",                                                                                          
+  "gasUsed": 48871,                                                                                                                              
+  "logs": [],                                                                                                                                    
+  "logsBloom": "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",                                                
+  "status": false,                                                                                                                               
+  "to": "0xa0623f2cece0783b95a21267ef5b17a73c598aba",                                                                                            
+  "transactionHash": "0xabf37955c391f1ecb0d71f4687fcb37408d3d02ca50aa7d3cdcb278bc34f3a44",                                                       
+  "transactionIndex": 31,
+  "type": "0x0"
+}
+    at Object.TransactionError (/mnt/linux-files-2/coding/dao-voting/sealer-1/sealer/backend/node_modules/web3-core-helpers/src/errors.js:63:21)
+    at Object.TransactionRevertedWithoutReasonError (/mnt/linux-files-2/coding/dao-voting/sealer-1/sealer/backend/node_modules/web3-core-helpers/
+src/errors.js:75:21)
+    at /mnt/linux-files-2/coding/dao-voting/sealer-1/sealer/backend/node_modules/web3-core-method/src/index.js:448:48
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  receipt: {
+    blockHash: '0x2c2bd00a0d183f6a3fa5630caffa8ddb0e9632254c196a2e4eb0c43563f98b3c',
+    blockNumber: 9274460,
+    contractAddress: null,
+    cumulativeGasUsed: 7012131,
+    effectiveGasPrice: '0x3b9aca00',
+    from: '0x98b32c998f16e36cff94b430c656335d682e78dd',
+    gasUsed: 48871,
+    logs: [],
+    logsBloom: '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+    status: false,
+    to: '0xa0623f2cece0783b95a21267ef5b17a73c598aba',
+    transactionHash: '0xabf37955c391f1ecb0d71f4687fcb37408d3d02ca50aa7d3cdcb278bc34f3a44',
+    transactionIndex: 31,
+    type: '0x0'
+  }
+}
