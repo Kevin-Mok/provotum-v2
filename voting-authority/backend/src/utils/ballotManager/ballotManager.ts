@@ -279,9 +279,12 @@ export const combineDecryptedShares = async (): Promise<boolean> => {
     console.log(`pre-combineDecryptedShares numVotes: ${numVotes}`)
     await contract.methods.combineDecryptedShares().call()
 
+    const publicStatus = await contract.methods.votingState().call()
+    console.log(`publicStatus: ${publicStatus}`)
     status = await contract.methods.getBallotStatus().call()
     console.log(`combineDecryptedShares status: ${status}`)
   } catch (error) {
+    console.log(error)
     throw new Error('The decrypted shares could no be combined.')
   }
 }
@@ -298,6 +301,7 @@ export const getVoteResult = async (): Promise<number> => {
     console.log(`getVoteResult status: ${status}`)
     return await contract.methods.getVoteResult().call()
   } catch (error) {
+      console.log(error)
     throw new Error('The final voting result could not be fetched. Maybe the voting is still ongoing.')
   }
 }

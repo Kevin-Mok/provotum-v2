@@ -123,7 +123,8 @@ contract Ballot {
     // /////////////////////////////////
     // variables
     // /////////////////////////////////
-    VotingState private votingState = VotingState.KEY_GENERATION;
+    // VotingState private votingState = VotingState.KEY_GENERATION;
+    VotingState public votingState = VotingState.KEY_GENERATION;
 
     VoteProofVerifier private voteVerifier;
     SumProofVerifier private sumVerifier;
@@ -255,6 +256,17 @@ contract Ballot {
 
         // move into the RESULT state
         votingState = VotingState.RESULT;
+        // require(votingState == VotingState.RESULT, 'Need state RESULT.');
+        // require(votingState != VotingState.RESULT, 'Need state RESULT.');
+        // string memory ballotStatus = getBallotStatus();
+        // require(ballotStatus == string('RESULT'), 'Need state RESULT.');
+        // string memory ballotStatus = getBallotStatus();
+        require(compareStrings(getBallotStatus(), string('RESULT')), 'Need state RESULT.');
+        require(votingState() == 2, 'Need state RESULT.');
+    }
+
+    function compareStrings(string memory a, string memory b) public view returns (bool) {
+        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
     // /////////////////////////////////

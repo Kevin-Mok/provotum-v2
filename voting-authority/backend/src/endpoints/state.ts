@@ -272,7 +272,7 @@ router.post('/state', async (req, res) => {
         })
         return
       }
-        await BallotManager.combineDecryptedShares()
+        // await BallotManager.combineDecryptedShares()
 
       // setValue(STATE_TABLE, VotingState.KEY_GENERATION)
       setValue(STATE_TABLE, VotingState.KEY_GENERATION)
