@@ -116,9 +116,9 @@ export const submitPublicKeyShare = async (
     console.log("getNrOfPublicKeyShares")
     let nrOfPublicKeyShares = await getNrOfPublicKeyShares() 
     console.log(nrOfPublicKeyShares)
-    console.log("getPublicKeyShares")
-    let publicKeyShares = await getPublicKeyShares() 
-    console.log(publicKeyShares)
+    // console.log("getPublicKeyShares")
+    // let publicKeyShares = await getPublicKeyShares()
+    // console.log(publicKeyShares)
     const txData = await contract.methods.submitPublicKeyShare(toHex(keyShare.h), toHex(keyGenProof.c), toHex(keyGenProof.d)).encodeABI()
     // const rawTxOptions = {
       // nonce: await Account.getAccountNonce(),
@@ -138,9 +138,9 @@ export const submitPublicKeyShare = async (
     nrOfPublicKeyShares = await getNrOfPublicKeyShares() 
     console.log(nrOfPublicKeyShares)
 
-    console.log("getPublicKeyShares")
-    publicKeyShares = await getPublicKeyShares() 
-    console.log(publicKeyShares)
+    // console.log("getPublicKeyShares")
+    // publicKeyShares = await getPublicKeyShares()
+    // console.log(publicKeyShares)
     // console.log(rawTxOptions)
     // const tx = new Tx(rawTxOptions, {'chain':'goerli'});
     // console.log("Signing transaction...");

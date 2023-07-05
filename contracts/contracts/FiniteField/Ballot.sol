@@ -1,5 +1,4 @@
-// pragma solidity ^0.8.4;
-pragma solidity ^0.8.4;
+pragma solidity ^0.5.3;
 
 import './VoteProofVerifier.sol';
 import './SumProofVerifier.sol';
@@ -170,8 +169,6 @@ contract Ballot {
         IS_PARAMETERS_SET = true;
     }
 
-    error InvalidSealerKeyNumber(uint256 shares, uint256 authorities);
-
     // generates the public key of the elgamal crypto system
     // - the public key is generated from all submitted public key shares by the sealer nodes
     // - their product forms the public key
@@ -180,16 +177,10 @@ contract Ballot {
         require(!IS_PUBKEY_SET, 'The public key is already set.');
 
         // every sealer needs to have published it's public key share
-        // require(
-            // election.publicKeyShareWallet.length == NR_OF_AUTHORITY_NODES,
-            // 'Public key shares !== number of authorities.'
-        // );
-        if(election.publicKeyShareWallet.length !=
-           NR_OF_AUTHORITY_NODES)
-            revert InvalidSealerKeyNumber({
-                shares: election.publicKeyShareWallet.length,
-                authorities: NR_OF_AUTHORITY_NODES
-            });
+        require(
+            election.publicKeyShareWallet.length == NR_OF_AUTHORITY_NODES,
+            'Public key shares !== number of authorities.'
+        );
 
         // set an initial key (here, we take the first)
         address firstSealerAddress = election.publicKeyShareWallet[0];
@@ -270,8 +261,6 @@ contract Ballot {
     // SEALER core functions
     // /////////////////////////////////
 
-    error SealerSubmitted();
-
     // submit the public key share from the distributed key generation
     function submitPublicKeyShare(uint256 key, uint256 proof_c, uint256 proof_d)
         external
@@ -292,7 +281,6 @@ contract Ballot {
         for (uint256 i; i < election.publicKeyShareWallet.length; i++) {
             if (election.publicKeyShareWallet[i] == msg.sender) {
                 sealerAlreadySubmitted = true;
-                revert SealerSubmitted();
             }
         }
 
@@ -404,11 +392,6 @@ contract Ballot {
     // get the total number of public key shares
     function getNrOfPublicKeyShares() public view returns (uint256) {
         return election.publicKeyShareWallet.length;
-    }
-
-    // get the total number of public key shares
-    function getPublicKeyShares() public view returns (address  [] memory) {
-        return election.publicKeyShareWallet;
     }
 
     // get combined public key of the system

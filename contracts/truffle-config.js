@@ -32,8 +32,8 @@ module.exports = {
           runs: 1337,
         },
       },
-      // version: '0.5.3', // ex:  "0.4.20". (Default: Truffle's installed solc)
-      version: '0.8.4', // ex:  "0.4.20". (Default: Truffle's installed solc)
+      version: '0.5.3', // ex:  "0.4.20". (Default: Truffle's installed solc)
+      // version: '0.8.4', // ex:  "0.4.20". (Default: Truffle's installed solc)
     },
   },
 }

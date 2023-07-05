@@ -1,4 +1,4 @@
-pragma solidity ^0.8.4;
+pragma solidity ^0.5.3;
 
 // Modulo math function used by the contracts in the eVoting system
 library ModuloMathLib {

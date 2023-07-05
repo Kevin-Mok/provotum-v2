@@ -1,4 +1,4 @@
-pragma solidity ^0.8.4;
+pragma solidity ^0.5.3;
 
 import './EllipticCurveLib.sol';
 
