@@ -38,6 +38,7 @@ router.post('/decrypt', async (req: express.Request, res: express.Response) => {
 
         // read private key share from DB and convert back to BN
         const privateKeyShareString: string = getValueFromDB(PRIVATE_KEY_SHARE_TABLE)
+        console.log(privateKeyShareString)
         const privateKeyShare: BN = new BN(privateKeyShareString, 'hex')
 
         const decryptedShare = BallotManager.decryptShare(sum, systemParams, privateKeyShare)
