@@ -5,6 +5,7 @@
 - VA
 BE
 cd voting-authority/backend
+- rename private-key-example.ts to private-key.ts
 npm run serve:localhost
 - need to restart often when making changes
 
