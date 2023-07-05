@@ -2,7 +2,17 @@ require("@nomiclabs/hardhat-etherscan");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.5.3",
+  solidity: {
+    version: "0.8.4",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+    },
+
+  },
+  // solidity: "0.8.4",
   networks: {
     goerli: {
       url: "https://eth-goerli.g.alchemy.com/v2/xGFaw_LYv1Fg9dyHAiyVA4cUMOAApxZd"

@@ -4,7 +4,8 @@ import { config } from 'dotenv'
 config()
 
 export const parityConfig = {
-  numberOfAuthorityNodes: 3,
+  // numberOfAuthorityNodes: 3,
+  numberOfAuthorityNodes: 1,
   // node to connect to and account to deploy the contracts and interact with them
   // nodeUrl: `http://${process.env.PARITY_NODE_IP}:${process.env.PARITY_NODE_PORT}`,
   // nodeUrl: 'https://goerli.blockpi.network/v1/rpc/public',

@@ -183,10 +183,11 @@ const sendTx = async (txData) => {
       // maxPriorityFeePerGas: '0x3B9ACA00',
       // maxFeePerGas: '0x2540BE400',
       // gasPrice: "0xBA43B7400", //ETH per unit of gas, legacy 50
+      gasPrice: "0x5D21DBA00", //ETH per unit of gas, legacy 25
       // gasPrice: "0x2540BE400", //ETH per unit of gas, legacy 10
-      gasPrice: "0x3B9ACA00", //ETH per unit of gas, legacy 1
+      // gasPrice: "0x3B9ACA00", //ETH per unit of gas, legacy 1
       // gasLimit: "0x1AB3F00" //max number of gas units the tx is allowed to use, 28 mil
-      gasLimit: "0xF4240" //max number of gas units the tx is allowed to use, 28 mil
+      gasLimit: "0xF4240" //max number of gas units the tx is allowed to use, 1 mil
     };
   // const common = Common.custom(
     // {

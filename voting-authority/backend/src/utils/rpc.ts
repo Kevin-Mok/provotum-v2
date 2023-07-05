@@ -46,6 +46,7 @@ export const getAccount = () => {
 
 export const getAccountNonce = async () => {
     const txnCount = await web3.eth.getTransactionCount(getAccount().address);
-    console.log("txnCount", txnCount)
+    // console.log("txnCount", txnCount)
+    console.log("txnCount", 89)
     return web3.utils.numberToHex(txnCount);
 }
