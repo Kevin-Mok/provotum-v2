@@ -262,7 +262,7 @@ contract Ballot {
         // require(ballotStatus == string('RESULT'), 'Need state RESULT.');
         // string memory ballotStatus = getBallotStatus();
         require(compareStrings(getBallotStatus(), string('RESULT')), 'Need state RESULT.');
-        require(votingState() == 2, 'Need state RESULT.');
+        // require(votingState() == 2, 'Need state RESULT.');
     }
 
     function compareStrings(string memory a, string memory b) public view returns (bool) {
@@ -453,7 +453,7 @@ contract Ballot {
 
     // get vote result
     function getVoteResult() public view returns (uint256) {
-        require(votingState == VotingState.RESULT, 'The contract needs to be in state: RESULT.');
+        // require(votingState == VotingState.RESULT, 'The contract needs to be in state: RESULT.');
         return election.yesVotes;
     }
 }
