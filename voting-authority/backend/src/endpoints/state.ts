@@ -184,6 +184,7 @@ router.get('/state', async (req, res) => {
         })
         return
       }
+      console.log(`totalVotes: ${totalVotes}`)
 
       let yesVotes: number = 0
       try {
@@ -195,6 +196,7 @@ router.get('/state', async (req, res) => {
         })
         return
       }
+      console.log(`yesVotes: ${yesVotes}`)
 
       res.status(200).json({
         state: currentState,
