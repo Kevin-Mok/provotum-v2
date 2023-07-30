@@ -17,7 +17,8 @@ rm -f $dir/.env
 ###########################################
 # Mode
 ###########################################
-mode=development
+# mode=development
+mode=production
 ###########################################
 # Config
 # - the config file with all IPs and ports

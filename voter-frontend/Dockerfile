@@ -21,7 +21,8 @@ ENV NODE_ENV=development
 WORKDIR /usr/code
 
 # install build dependencies
-RUN apk add --no-cache bash python make g++ gcc openssh-client git
+RUN apk add --update --no-cache curl py-pip
+RUN apk add --no-cache bash python3 make g++ gcc openssh-client git
 
 # copy the src & public folder
 COPY . .

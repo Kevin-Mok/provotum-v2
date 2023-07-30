@@ -118,7 +118,14 @@ services:
     command: node dist/server.js
 
   voter:
-    image: docker.pkg.github.com/alexscheitlin/master-project-evoting/voter_frontend:v2
+    # image: docker.pkg.github.com/alexscheitlin/master-project-evoting/voter_frontend:v2
+    # image: docker.io/library/voter_frontend
+    image: ghcr.io/kevin-mok/voter_frontend:text
+    # image: voter_frontend:text
+    # build: voter-frontend/
+    # build:
+      # context: ./voter-frontend/
+      # dockerfile: Dockerfile
     environment:
       NODE_ENV: production
       REACT_APP_IDENTITY_PROVIDER_PORT: 4003

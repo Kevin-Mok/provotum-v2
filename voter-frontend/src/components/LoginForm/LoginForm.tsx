@@ -25,7 +25,7 @@ const LoginForm: React.FC<Props> = ({ onLogin, loading }) => {
       <CssBaseline />
       <Paper className={classes.paper} elevation={2}>
         <Typography component="h1" variant="body2">
-          Please sign in with your Swiss E-Identity
+          Please sign in with your Swiss E-Identity (test)
         </Typography>
         <form className={classes.form} autoComplete="off">
           <TextField

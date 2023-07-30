@@ -17,10 +17,12 @@ The following must be installed on your machine in order to run the whole setup.
 - docker-compose
 
 Install JQ (https://stedolan.github.io/jq/download/) to process JSON in the command-line:
+Docker: https://docs.docker.com/engine/install/ubuntu/
 
 ```bash
 # ubuntu
-sudo apt-get install jq
+sudo apt-get update
+sudo apt-get install nodejs npm jq ca-certificates curl gnupg
 
 # fedora
 sudo dnf install jq
