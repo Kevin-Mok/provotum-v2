@@ -10,7 +10,7 @@
 
 The following must be installed on your machine in order to run the whole setup.
 
-- Node 12+
+- Node 18
 - npm
 - jq (see below)
 - docker
@@ -25,8 +25,6 @@ sudo apt-get install jq
 # fedora
 sudo dnf install jq
 ```
-
-Ganache: `npm install ganache --global`
 
 ### Github Packages & Github Config JSON (Important!)
 
