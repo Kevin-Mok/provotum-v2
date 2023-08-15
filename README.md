@@ -26,6 +26,8 @@ sudo apt-get install jq
 sudo dnf install jq
 ```
 
+Ganache: `npm install ganache --global`
+
 ### Github Packages & Github Config JSON (Important!)
 
 The pre-built docker images are hosted on Gitub Packages. Accessing the images is currently only possible when logged in to: `docker.pkg.github.com`.
