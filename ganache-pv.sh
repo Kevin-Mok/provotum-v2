@@ -1,3 +1,4 @@
+#!/bin/sh
 # ganache \
 docker run --detach --publish 8545:8545 trufflesuite/ganache:latest --verbose \
     --wallet.accounts 0xe8ee08a685d093206043f7274958f3a51944ce0b49393d20fd9fed2d0585077b,50000000000000000000 \

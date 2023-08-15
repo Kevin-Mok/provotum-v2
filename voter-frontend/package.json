@@ -21,6 +21,7 @@
     "@material-ui/lab": "^4.0.0-alpha.34",
     "@meck93/evote-crypto": "0.1.10",
     "@metamask/detect-provider": "^2.0.0",
+    "@types/babel__traverse": "^7.17.1",
     "@types/chai": "^4.2.4",
     "@types/node": "12.12.6",
     "@types/react": "16.9.11",
@@ -49,7 +50,7 @@
   },
   "scripts": {
     "start:localhost": "./dev.sh",
-    "start": "react-scripts start",
+    "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
     "pre-commit": "lint-staged",
     "test": "react-scripts test",
