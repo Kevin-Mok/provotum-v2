@@ -15,6 +15,7 @@ The following must be installed on your machine in order to run the whole setup.
 - jq (see below)
 - docker
 - docker-compose
+- MetaMask
 
 Install JQ (https://stedolan.github.io/jq/download/) to process JSON in the command-line:
 
