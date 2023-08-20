@@ -1,5 +1,5 @@
 # Files to Read
-- README-orig.md
+- [README-orig.md](README-orig.md)
   - prerequisites to run
     - GitHub config
   - running prebuilt Docker
